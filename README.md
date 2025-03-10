@@ -92,11 +92,6 @@ Si deseas contribuir, por favor abre un issue o un pull request con mejoras o co
 
 ---
 
-## Licencia
-Este proyecto está bajo la licencia MIT. Puedes ver más detalles en el archivo `LICENSE`.
 
----
 
-## Contacto
-Si tienes dudas o sugerencias, puedes contactarme en [tu_email@example.com](mailto:tu_email@example.com).
 
