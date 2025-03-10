@@ -1,0 +1,4 @@
+.env
+bigquery-service-account.json
+test/
+__pycache__/
