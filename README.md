@@ -1,6 +1,7 @@
 # Webhook de MercadoLibre - Servidor Flask
 
-Este proyecto tiene como objetivo crear un servidor que escuche notificaciones enviadas por el webhook de MercadoLibre, habilitando exclusivamente las notificaciones de preguntas.
+Este proyecto tiene como objetivo crear un servidor que escuche notificaciones enviadas por el webhook de MercadoLibre, habilitando exclusivamente las notificaciones de preguntas y que las mismas sean respondidas por un modelo LLM.
+El modelo LLM primero clasifica la pregunta en un tipo de categoria, luego otro modelo responde la pregunta y un tercero audita la respuesta en busca de incongruencias, en caso de que la respuesta caiga en un FALLBACK se deriva la pregunta al dueño de la cuenta caso contrario se publcia la respuesta del modelo LLM, tambien hacemos uso de un modelo SWITCH, en caso de que el modelo A falle se utiliza el B (deepseek de preferencia por temas de coste economico, caso contrario pasamos a GPT 4)
 
 ## Tecnologías Utilizadas
 - **Flask**: Framework de Python para levantar el servidor.
