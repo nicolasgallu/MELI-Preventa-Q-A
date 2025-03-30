@@ -13,7 +13,6 @@ def handle_webhook():
     data = request.json
     topic = data.get("topic", "unknown")
     resource = data.get("resource", "unknown")
-    logger.info(f"Webhook received - Topic: {topic}, Resource: {resource}")
 
     if not topic:
         logger.warning("Datos inválidos o falta de tema en la notificación.")
@@ -21,6 +20,7 @@ def handle_webhook():
 
     try:
         if topic == "questions":
+            logger.info(f"Webhook received - Topic: {topic}, Resource: {resource}")
             handle_questions(data)
             return jsonify({"status": "processed", "topic": "questions"}), 200
 

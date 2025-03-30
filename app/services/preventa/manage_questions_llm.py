@@ -1,4 +1,5 @@
 import json
+import re
 from app.utils.logger import logger
 from app.config.config import COST_PER_1K_TOKENS,FALLBACK_MESSAGE
 from app.services.preventa.helpers.item_context import get_item_context
@@ -55,27 +56,35 @@ class ProductQuestionBot:
         return response, total_cost, model
         
 
-    def _audit_answer (self, question, item_context, response): #revisar este codigo
-        """Responde la pregunta del Customer."""
+    def _audit_answer (self, question, item_context, response):
         logger.info(f"Ejecutando modelo para auditar respuesta del bot.")
         prompt = "\n".join(json.loads(get_prompt_json("audit_json"))["audit"]["description"])
         question = f"pregunta_cliente: {question} \n  contexto: {item_context} \n respuesta_llm: {response}"
         response_json,model = switch_llm_body(prompt, question, 1000, 0.45)
-        audit_response = json.loads(response_json['choices'][0]['message']['content'].strip())
-        total_cost = self._calculate_cost(response_json,model)     
+        total_cost = self._calculate_cost(response_json,model)  
+
+        output_text = response_json['choices'][0]['message']['content'].strip()
+        if output_text.startswith("```") and output_text.endswith("```"):
+            output_text = re.sub(r'^```(?:json)?\s*', '', output_text)
+            output_text = re.sub(r'\s*```$', '', output_text)
+     
+        
         try:
-            if type(audit_response) is not dict:
-                logger.error(f"Error el formato de respuesta del bot auditor no fue un diccionario.")
-                raise ValueError
-            if not all(key in audit_response for key in ["respuesta_valida", "razon_rechazo", "correccion_sugerida"]):
-                logger.error(f"Error el formato de respuesta del bot auditor no contiene algunas de las claves necesarias.")
-                raise ValueError
-            return audit_response, total_cost, model
+            audit_response = json.loads(output_text)
+            try:
+                if type(audit_response) is not dict:
+                    logger.error(f"Error el formato de respuesta del bot auditor no fue un diccionario.")
+                    raise ValueError
+                if not all(key in audit_response for key in ["respuesta_valida", "razon_rechazo", "correccion_sugerida"]):
+                    logger.error(f"Error el formato de respuesta del bot auditor no contiene algunas de las claves necesarias.")
+                    raise ValueError
+                else:
+                    return audit_response,total_cost,model
+            except:
+                return total_cost
         except:
-            logger.error(f"Error inesperado a la hora de controlar el formato de respuesta del bot auditor")
-            return "consultar con humano",total_cost
-
-
+            logger.error("Audit Bot fallo al procesar el json.loads:")   
+            return total_cost
 
     def _filter_output(self,response):
         logger.info(f"Ejecutando filtro FALLBACK")
@@ -84,7 +93,7 @@ class ProductQuestionBot:
             return True
         else:
             logger.info(f"La respuesta del bot paso el filtro FALLBACK")
-            False
+            return False
 
 
 
@@ -96,31 +105,48 @@ class ProductQuestionBot:
         bot_answer,new_cost,model = self._answering_customer(question=question, category=category, item_context=item_context,total_cost=total_cost)
         total_cost+=new_cost
 
-        if self._filter_output(bot_answer): #filtro FALLBACK
-            load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback="", bot_feedback_sent=False, costo=total_cost,bot_model=model)
+        if self._filter_output(bot_answer): 
+            load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback="", bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
             return FALLBACK_MESSAGE
         
-        else: #auditoria
-            audit_dict,new_cost,model = self._audit_answer(question, item_context, bot_answer)
-            audit_answer = audit_dict["respuesta_valida"]
-            bot_feedback = audit_dict["correccion_sugerida"]
+        
+        audit_tuple = self._audit_answer(question, item_context, bot_answer)
+
+        try:
+            if len(audit_tuple) > 2:
+                audit_dict = audit_tuple[0]
+                new_cost = audit_tuple[1]
+                model = audit_tuple[2]
+                audit_answer = audit_dict["respuesta_valida"]
+                bot_feedback = audit_dict["correccion_sugerida"]
+                bot_feedback_reason = audit_dict["razon_rechazo"]
+                total_cost += new_cost
+
+                if audit_answer is True or audit_answer == "True" or audit_answer == "true":
+                    logger.info(f"La respuesta paso con exito la auditoria.")
+                    load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=True, bot_feedback="", bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
+                    return bot_answer
+
+                elif len(bot_feedback) > 10:
+                    logger.info(f"La respuesta no paso con exito la auditoria.")
+                    if self._filter_output(bot_feedback): 
+                        load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, 
+                                             bot_feedback=bot_feedback, bot_feedback_sent=False, bot_feedback_reason=bot_feedback_reason,
+                                             total_cost=total_cost,bot_model=model)
+                        return FALLBACK_MESSAGE
+                    else:
+                        logger.info(f"Se envia la respuesta sugerida por bot auditor")
+                        load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, 
+                                             bot_feedback=bot_feedback, bot_feedback_sent=True, bot_feedback_reason=bot_feedback_reason,
+                                             total_cost=total_cost,bot_model=model) 
+                        return bot_feedback                
+        except:
+            new_cost = audit_tuple[0]
             total_cost += new_cost
-            if audit_answer is True or audit_answer == "True" or audit_answer == "true":
-                logger.info(f"La respuesta paso con exito la auditoria.")
-                load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=True, bot_feedback="", bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
-                return bot_answer
-
-            elif len(bot_feedback) > 10:
-                logger.info(f"La respuesta fallo el proceso de auditoria.")
-                if self._filter_output(bot_feedback): #filtro FALLBACK
-                    load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback=bot_feedback, bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
-                    return FALLBACK_MESSAGE
-                else:
-                    logger.info(f"Se envia la respuesta sugerida por bot auditor")
-                    load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback=bot_feedback, bot_feedback_sent=True, total_cost=total_cost,bot_model=model) 
-                    return bot_feedback
-
-
+            load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback=bot_feedback, bot_feedback_sent=False, total_cost=total_cost,bot_model=model) 
+            return FALLBACK_MESSAGE
+                    
+    
 
     def generate_llm_response(self,question,item_id):
         try:
@@ -143,12 +169,8 @@ class ProductQuestionBot:
             
             return self._execute_bot(question,item_context,item_id,item_name)
         
-        except:
-            logger.error("Error de respuesta por parte del LLM")
+        except Exception as e:
+            logger.error("Error de respuesta por parte del LLM",e)
             return FALLBACK_MESSAGE
 
         
-
-
-
-

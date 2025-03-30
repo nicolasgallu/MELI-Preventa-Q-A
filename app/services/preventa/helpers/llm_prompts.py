@@ -7,7 +7,6 @@ from app.config.config import GOOGLE_APPLICATION_CREDENTIALS, DATASET_ID, TABLE_
 credentials = Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
 client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
-DATASET_ID = "meli_test"
 TABLE_PROMPTS = f"{client.project}.{DATASET_ID}.{TABLE_PROMPTS}"
 
 

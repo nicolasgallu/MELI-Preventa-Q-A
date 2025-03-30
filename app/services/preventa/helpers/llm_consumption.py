@@ -30,6 +30,7 @@ def ensure_table_schema():
                 bigquery.SchemaField("bot_answer_sent", "BOOLEAN", mode="NULLABLE"),
                 bigquery.SchemaField("bot_feedback", "STRING", mode="NULLABLE"),
                 bigquery.SchemaField("bot_feedback_sent", "BOOLEAN", mode="NULLABLE"),
+                bigquery.SchemaField("bot_feedback_reason", "BOOLEAN", mode="NULLABLE"),
                 bigquery.SchemaField("bot_model", "STRING", mode="NULLABLE"),
                 bigquery.SchemaField("total_cost", "FLOAT", mode="NULLABLE")
                 ]
@@ -55,6 +56,7 @@ def ensure_table_schema():
 
 
 
+
 def create_table():
     """
     Crea la tabla de BigQuery con el esquema definido.
@@ -71,6 +73,7 @@ def create_table():
     bigquery.SchemaField("bot_answer_sent", "BOOLEAN", mode="NULLABLE"),
     bigquery.SchemaField("bot_feedback", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("bot_feedback_sent", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("bot_feedback_reason", "BOOLEAN", mode="NULLABLE"),
     bigquery.SchemaField("bot_model", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("total_cost", "FLOAT", mode="NULLABLE")
     ]
@@ -81,7 +84,9 @@ def create_table():
 
 
 
-def load_llm_consumption (item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback="", bot_feedback_sent=False, total_cost=0,bot_model=None):
+def load_llm_consumption (item_id, item_name, question, category, bot_answer, 
+                          bot_answer_sent=False, bot_feedback="", bot_feedback_sent=False, bot_feedback_reason="",
+                          total_cost=0,bot_model=None):
     logger.info(f"guardando datos de consumo en llm_consumption")
     try:
         ensure_table_schema() 
@@ -95,6 +100,7 @@ def load_llm_consumption (item_id, item_name, question, category, bot_answer, bo
             "bot_answer_sent": bot_answer_sent,
             "bot_feedback": bot_feedback,
             "bot_feedback_sent": bot_feedback_sent,
+            "bot_feedback_reason": bot_feedback_reason,
             "bot_model": bot_model,
             "total_cost": total_cost
             }]
