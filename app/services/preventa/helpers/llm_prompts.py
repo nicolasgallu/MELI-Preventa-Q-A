@@ -9,7 +9,6 @@ client = bigquery.Client(credentials=credentials, project=credentials.project_id
 
 TABLE_PROMPTS = f"{client.project}.{DATASET_ID}.{TABLE_PROMPTS}"
 
-
 def get_prompt_json(campo):
     """devuelve el campo seleccionado de la tabla 'prompts_json' en GBQ."""
     storage_client = bigquery_storage.BigQueryReadClient(credentials=credentials)

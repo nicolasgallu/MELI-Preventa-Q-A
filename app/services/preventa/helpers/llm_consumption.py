@@ -30,7 +30,7 @@ def ensure_table_schema():
                 bigquery.SchemaField("bot_answer_sent", "BOOLEAN", mode="NULLABLE"),
                 bigquery.SchemaField("bot_feedback", "STRING", mode="NULLABLE"),
                 bigquery.SchemaField("bot_feedback_sent", "BOOLEAN", mode="NULLABLE"),
-                bigquery.SchemaField("bot_feedback_reason", "BOOLEAN", mode="NULLABLE"),
+                bigquery.SchemaField("bot_feedback_reason", "STRING", mode="NULLABLE"),
                 bigquery.SchemaField("bot_model", "STRING", mode="NULLABLE"),
                 bigquery.SchemaField("total_cost", "FLOAT", mode="NULLABLE")
                 ]
@@ -53,10 +53,6 @@ def ensure_table_schema():
         logger.error(f"Error al verificar/actualizar el esquema de la tabla: {e}")
 
 
-
-
-
-
 def create_table():
     """
     Crea la tabla de BigQuery con el esquema definido.
@@ -73,7 +69,7 @@ def create_table():
     bigquery.SchemaField("bot_answer_sent", "BOOLEAN", mode="NULLABLE"),
     bigquery.SchemaField("bot_feedback", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("bot_feedback_sent", "BOOLEAN", mode="NULLABLE"),
-    bigquery.SchemaField("bot_feedback_reason", "BOOLEAN", mode="NULLABLE"),
+    bigquery.SchemaField("bot_feedback_reason", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("bot_model", "STRING", mode="NULLABLE"),
     bigquery.SchemaField("total_cost", "FLOAT", mode="NULLABLE")
     ]
