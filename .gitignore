@@ -3,3 +3,5 @@ bigquery-service-account.json
 test/
 __pycache__/
 venv/
+clean_cache.sh
+telegram/
