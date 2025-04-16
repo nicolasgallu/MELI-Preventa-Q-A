@@ -1,0 +1,91 @@
+[2025-04-15 21:33:07] [INFO] [app] [PID:73972] [Thread:54536] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:33:15] [INFO] [app] [PID:73828] [Thread:54312] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:36:19] [INFO] [app] [PID:86384] [Thread:84936] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:36:24] [INFO] [app] [PID:86384] [Thread:84936] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 21:41:03] [INFO] [app] [PID:88088] [Thread:58508] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:41:07] [INFO] [app] [PID:88088] [Thread:58508] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 21:41:10] [INFO] [app] [PID:88088] [Thread:58508] [llm_prompts.py:21] [Ruta:N/A] Get prompt: precios_formas_pago ejecutado con éxito
+[2025-04-15 21:50:51] [INFO] [app] [PID:96740] [Thread:79556] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:50:55] [INFO] [app] [PID:96740] [Thread:79556] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 21:50:58] [INFO] [app] [PID:96740] [Thread:79556] [llm_prompts.py:21] [Ruta:N/A] Get prompt: precios_formas_pago ejecutado con éxito
+[2025-04-15 21:51:22] [INFO] [app] [PID:80688] [Thread:82608] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:51:27] [INFO] [app] [PID:80688] [Thread:82608] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 21:51:30] [INFO] [app] [PID:80688] [Thread:82608] [llm_prompts.py:21] [Ruta:N/A] Get prompt: precios_formas_pago ejecutado con éxito
+[2025-04-15 21:52:07] [INFO] [app] [PID:84188] [Thread:95480] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 21:52:11] [INFO] [app] [PID:84188] [Thread:95480] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 21:52:14] [INFO] [app] [PID:84188] [Thread:95480] [llm_prompts.py:21] [Ruta:N/A] Get prompt: precios_formas_pago ejecutado con éxito
+[2025-04-15 22:08:00] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:96416] [Thread:94976] [opentelemetry_tracing.py:66] [Ruta:N/A] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-15 22:08:00] [DEBUG] [google.auth.transport.requests] [PID:96416] [Thread:94976] [requests.py:185] [Ruta:N/A] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-15 22:08:06] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:34] [Ruta:N/A] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-15 22:08:10] [INFO] [app] [PID:96416] [Thread:94976] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 22:08:16] [INFO] [app] [PID:96416] [Thread:94976] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:08:16] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:45] [Ruta:N/A] Ejecutando modelo para responder al cliente.
+[2025-04-15 22:08:19] [INFO] [app] [PID:96416] [Thread:94976] [llm_prompts.py:21] [Ruta:N/A] Get prompt: garantias_soporte ejecutado con éxito
+[2025-04-15 22:08:27] [INFO] [app] [PID:96416] [Thread:94976] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:08:27] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:84] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:08:27] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:89] [Ruta:N/A] La respuesta del bot paso el filtro FALLBACK
+[2025-04-15 22:08:27] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:55] [Ruta:N/A] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-15 22:08:30] [INFO] [app] [PID:96416] [Thread:94976] [llm_prompts.py:21] [Ruta:N/A] Get prompt: audit_json ejecutado con éxito
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:125] [Ruta:N/A] La respuesta no paso con exito la auditoria.
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:84] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [manage_questions_llm.py:86] [Ruta:N/A] La respuesta del bot cae en el filtro FALLBACK
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [llm_consumption.py:86] [Ruta:N/A] guardando datos de consumo en llm_consumption
+[2025-04-15 22:08:38] [INFO] [app] [PID:96416] [Thread:94976] [llm_consumption.py:48] [Ruta:N/A] El esquema de la tabla ya está actualizado.
+[2025-04-15 22:08:39] [INFO] [app] [PID:96416] [Thread:94976] [llm_consumption.py:108] [Ruta:N/A] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-15 22:10:38] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:84140] [Thread:81612] [opentelemetry_tracing.py:66] [Ruta:N/A] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-15 22:10:38] [DEBUG] [google.auth.transport.requests] [PID:84140] [Thread:81612] [requests.py:185] [Ruta:N/A] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-15 22:10:42] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:34] [Ruta:N/A] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-15 22:10:44] [INFO] [app] [PID:84140] [Thread:81612] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 22:10:49] [INFO] [app] [PID:84140] [Thread:81612] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:10:49] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:45] [Ruta:N/A] Ejecutando modelo para responder al cliente.
+[2025-04-15 22:10:52] [INFO] [app] [PID:84140] [Thread:81612] [llm_prompts.py:21] [Ruta:N/A] Get prompt: garantias_soporte ejecutado con éxito
+[2025-04-15 22:10:58] [INFO] [app] [PID:84140] [Thread:81612] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:10:58] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:85] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:10:58] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:90] [Ruta:N/A] La respuesta del bot paso el filtro FALLBACK
+[2025-04-15 22:10:58] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:56] [Ruta:N/A] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-15 22:11:01] [INFO] [app] [PID:84140] [Thread:81612] [llm_prompts.py:21] [Ruta:N/A] Get prompt: audit_json ejecutado con éxito
+[2025-04-15 22:11:08] [INFO] [app] [PID:84140] [Thread:81612] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:11:08] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:126] [Ruta:N/A] La respuesta no paso con exito la auditoria.
+[2025-04-15 22:11:08] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:85] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:11:08] [INFO] [app] [PID:84140] [Thread:81612] [manage_questions_llm.py:87] [Ruta:N/A] La respuesta del bot cae en el filtro FALLBACK
+[2025-04-15 22:11:08] [INFO] [app] [PID:84140] [Thread:81612] [llm_consumption.py:86] [Ruta:N/A] guardando datos de consumo en llm_consumption
+[2025-04-15 22:11:09] [INFO] [app] [PID:84140] [Thread:81612] [llm_consumption.py:48] [Ruta:N/A] El esquema de la tabla ya está actualizado.
+[2025-04-15 22:11:09] [INFO] [app] [PID:84140] [Thread:81612] [llm_consumption.py:108] [Ruta:N/A] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-15 22:11:58] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:86376] [Thread:41712] [opentelemetry_tracing.py:66] [Ruta:N/A] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-15 22:11:58] [DEBUG] [google.auth.transport.requests] [PID:86376] [Thread:41712] [requests.py:185] [Ruta:N/A] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-15 22:12:01] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:34] [Ruta:N/A] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-15 22:12:04] [INFO] [app] [PID:86376] [Thread:41712] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 22:12:09] [INFO] [app] [PID:86376] [Thread:41712] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:12:09] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:45] [Ruta:N/A] Ejecutando modelo para responder al cliente.
+[2025-04-15 22:12:12] [INFO] [app] [PID:86376] [Thread:41712] [llm_prompts.py:21] [Ruta:N/A] Get prompt: especificaciones_tecnicas_uso ejecutado con éxito
+[2025-04-15 22:12:20] [INFO] [app] [PID:86376] [Thread:41712] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:12:20] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:85] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:12:20] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:90] [Ruta:N/A] La respuesta del bot paso el filtro FALLBACK
+[2025-04-15 22:12:20] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:56] [Ruta:N/A] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-15 22:12:22] [INFO] [app] [PID:86376] [Thread:41712] [llm_prompts.py:21] [Ruta:N/A] Get prompt: audit_json ejecutado con éxito
+[2025-04-15 22:12:27] [INFO] [app] [PID:86376] [Thread:41712] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:12:27] [INFO] [app] [PID:86376] [Thread:41712] [manage_questions_llm.py:121] [Ruta:N/A] La respuesta paso con exito la auditoria.
+[2025-04-15 22:12:27] [INFO] [app] [PID:86376] [Thread:41712] [llm_consumption.py:86] [Ruta:N/A] guardando datos de consumo en llm_consumption
+[2025-04-15 22:12:28] [INFO] [app] [PID:86376] [Thread:41712] [llm_consumption.py:48] [Ruta:N/A] El esquema de la tabla ya está actualizado.
+[2025-04-15 22:12:29] [INFO] [app] [PID:86376] [Thread:41712] [llm_consumption.py:108] [Ruta:N/A] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-15 22:13:40] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:25792] [Thread:93968] [opentelemetry_tracing.py:66] [Ruta:N/A] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-15 22:13:40] [DEBUG] [google.auth.transport.requests] [PID:25792] [Thread:93968] [requests.py:185] [Ruta:N/A] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-15 22:13:44] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:34] [Ruta:N/A] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-15 22:13:47] [INFO] [app] [PID:25792] [Thread:93968] [llm_prompts.py:21] [Ruta:N/A] Get prompt: categories_json ejecutado con éxito
+[2025-04-15 22:13:52] [INFO] [app] [PID:25792] [Thread:93968] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:13:52] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:45] [Ruta:N/A] Ejecutando modelo para responder al cliente.
+[2025-04-15 22:13:55] [INFO] [app] [PID:25792] [Thread:93968] [llm_prompts.py:21] [Ruta:N/A] Get prompt: accesorios_complementos ejecutado con éxito
+[2025-04-15 22:14:05] [INFO] [app] [PID:25792] [Thread:93968] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:14:05] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:85] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:14:05] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:90] [Ruta:N/A] La respuesta del bot paso el filtro FALLBACK
+[2025-04-15 22:14:05] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:56] [Ruta:N/A] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-15 22:14:07] [INFO] [app] [PID:25792] [Thread:93968] [llm_prompts.py:21] [Ruta:N/A] Get prompt: audit_json ejecutado con éxito
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [llm_switch.py:20] [Ruta:N/A] Modelo utilizado: deepseek-chat
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:126] [Ruta:N/A] La respuesta no paso con exito la auditoria.
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:85] [Ruta:N/A] Ejecutando filtro FALLBACK
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:90] [Ruta:N/A] La respuesta del bot paso el filtro FALLBACK
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [manage_questions_llm.py:133] [Ruta:N/A] Se envia la respuesta sugerida por bot auditor
+[2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:86] [Ruta:N/A] guardando datos de consumo en llm_consumption
+[2025-04-15 22:14:17] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:48] [Ruta:N/A] El esquema de la tabla ya está actualizado.
+[2025-04-15 22:14:17] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:108] [Ruta:N/A] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.

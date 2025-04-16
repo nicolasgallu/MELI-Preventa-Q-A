@@ -2,3 +2,4 @@
 bigquery-service-account.json
 test/
 __pycache__/
+venv/

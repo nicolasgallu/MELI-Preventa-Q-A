@@ -32,7 +32,7 @@ class ProductQuestionBot:
     def _classify_question(self, question):
         """Clasifica la pregunta en una de las categorías."""
         logger.info(f"Ejecutando modelo para clasificar la pregunta del cliente")
-        prompt = "\n".join(json.loads(get_prompt_json("categories_json"))["categories"]["description"])
+        prompt = get_prompt_json("categories_json")
         response_json,model = switch_llm_body(prompt, question, 50, 0.2)
         category = response_json['choices'][0]['message']['content'].strip()
         total_cost = self._calculate_cost(response_json,model)
@@ -43,13 +43,8 @@ class ProductQuestionBot:
     def _answering_customer (self, question, category, item_context, total_cost=0):
         """Responde la pregunta del Customer."""
         logger.info(f"Ejecutando modelo para responder al cliente.")
-        clusterfile = json.loads(get_prompt_json("clusters_json"))
-        for cluster in clusterfile:
-            if cluster == category:
-                context_prompt = "\n".join(clusterfile[cluster]["description"])
-                break
-            else:continue
-        prompt = f"{context_prompt} \n ----- \n LA PREGUNTA DEL CLIENTE ES EXCLUSIVAMENTE SOBRE EL SIGUIENTE PRODUCTO: {item_context}"
+        clusterfile = get_prompt_json(category)
+        prompt = f"{clusterfile} \n ----- \n la pregunta del cliente es sobre el siguiente producto: {item_context}"
         response_json,model = switch_llm_body(prompt, question, 1000, 0.55)
         response = response_json['choices'][0]['message']['content'].strip()
         total_cost = self._calculate_cost(response_json,model)
@@ -58,17 +53,15 @@ class ProductQuestionBot:
 
     def _audit_answer (self, question, item_context, response):
         logger.info(f"Ejecutando modelo para auditar respuesta del bot.")
-        prompt = "\n".join(json.loads(get_prompt_json("audit_json"))["audit"]["description"])
+        prompt = get_prompt_json("audit_json")
         question = f"pregunta_cliente: {question} \n  contexto: {item_context} \n respuesta_llm: {response}"
         response_json,model = switch_llm_body(prompt, question, 1000, 0.45)
         total_cost = self._calculate_cost(response_json,model)  
-
         output_text = response_json['choices'][0]['message']['content'].strip()
         if output_text.startswith("```") and output_text.endswith("```"):
             output_text = re.sub(r'^```(?:json)?\s*', '', output_text)
             output_text = re.sub(r'\s*```$', '', output_text)
      
-        
         try:
             audit_response = json.loads(output_text)
             try:

@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install watchdog
 
 # Exponer el puerto
-EXPOSE 5001
+EXPOSE 5000
 
 # Comando de inicio con timeout ajustado
-CMD ["gunicorn", "-w", "4", "-k", "gthread", "--threads", "4", "--timeout", "600", "-b", "0.0.0.0:5001", "main:app"]
+CMD ["gunicorn", "-w", "4", "-k", "gthread", "--threads", "4", "--timeout", "600", "-b", "0.0.0.0:5000", "main:app"]
