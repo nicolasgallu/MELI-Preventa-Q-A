@@ -32,6 +32,7 @@ def get_item_context(item_id):
         warranty = rows["warranty"][0]
         boolean_free_shipping = rows["boolean_free_shipping"][0]
         direccion_local = rows["direccion_local"][0]
+        permalink = rows["permalink"][0]
 
         # Construir el contexto del ítem
         context = {
@@ -43,8 +44,10 @@ def get_item_context(item_id):
             "condition":condition ,
             "warranty":warranty ,
             "boolean_free_shipping":boolean_free_shipping ,
-            "direccion_local":direccion_local 
+            "direccion_local":direccion_local,
+            "permalink":permalink,
             }
+        
         return context
 
     except NotFound as nf_error:

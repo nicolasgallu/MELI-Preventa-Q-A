@@ -7,12 +7,6 @@ load_dotenv()
 #directorio base
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Subir un nivel desde "services"
 
-
-
-##UTILS > REFRESH TOKEN
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-
 #-----VARIABLES CONSTANTES - PREVENTA-----#
 
 ## SERVICES > LLM MODULE
@@ -43,6 +37,7 @@ FALLBACK_MESSAGE = "consultar con humano"
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
+RECIPIENT_EMAIL_2 = os.getenv("RECIPIENT_EMAIL_2")
 
 ##GBQ ACCESS
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR, "config", "bigquery-service-account.json")

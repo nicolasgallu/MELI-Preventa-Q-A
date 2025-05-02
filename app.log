@@ -89,3 +89,135 @@
 [2025-04-15 22:14:16] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:86] [Ruta:N/A] guardando datos de consumo en llm_consumption
 [2025-04-15 22:14:17] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:48] [Ruta:N/A] El esquema de la tabla ya está actualizado.
 [2025-04-15 22:14:17] [INFO] [app] [PID:25792] [Thread:93968] [llm_consumption.py:108] [Ruta:N/A] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-29 16:32:41] [INFO] [app] [PID:56896] [Thread:45268] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:32:44] [INFO] [app] [PID:56896] [Thread:45268] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:32:47] [INFO] [app] [PID:56896] [Thread:45268] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:34:22] [INFO] [app] [PID:38788] [Thread:48896] [blueprint_preventa.py:72] [Ruta:N/A] Respuesta escalada al Humano: testeo
+[2025-04-29 16:34:25] [INFO] [app] [PID:38788] [Thread:48896] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:34:28] [INFO] [app] [PID:38788] [Thread:48896] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:34:31] [INFO] [app] [PID:38788] [Thread:48896] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:34:34] [INFO] [app] [PID:38788] [Thread:48896] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:36:19] [INFO] [app] [PID:22604] [Thread:45080] [blueprint_preventa.py:72] [Ruta:N/A] Respuesta escalada al Humano: testeo
+[2025-04-29 16:36:22] [INFO] [app] [PID:22604] [Thread:45080] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:36:25] [INFO] [app] [PID:22604] [Thread:45080] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:38:23] [INFO] [app] [PID:63476] [Thread:63356] [blueprint_preventa.py:72] [Ruta:N/A] Respuesta escalada al Humano: testeo
+[2025-04-29 16:38:26] [INFO] [app] [PID:63476] [Thread:63356] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:38:29] [INFO] [app] [PID:63476] [Thread:63356] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:39:34] [INFO] [app] [PID:45068] [Thread:39920] [blueprint_preventa.py:72] [Ruta:N/A] Respuesta escalada al Humano: testeo
+[2025-04-29 16:39:38] [INFO] [app] [PID:45068] [Thread:39920] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:40:18] [INFO] [app] [PID:4968] [Thread:62324] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:41:03] [INFO] [app] [PID:58144] [Thread:8368] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:41:07] [INFO] [app] [PID:58144] [Thread:8368] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 16:41:45] [INFO] [app] [PID:36324] [Thread:52892] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-29 16:41:48] [INFO] [app] [PID:36324] [Thread:52892] [manage_questions_human.py:30] [Ruta:N/A] Correo enviado exitosamente.
+[2025-04-29 21:20:00] [ERROR] [app] [PID:57696] [Thread:12448] [manage_questions_intern.py:35] [Ruta:N/A] Error al enviar el correo interno: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 41be03b00d2f7-b15faee2f44sm9551792a12.77 - gsmtp')
+[2025-04-29 21:24:39] [ERROR] [app] [PID:50504] [Thread:63232] [manage_questions_intern.py:35] [Ruta:N/A] Error al enviar el correo interno: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-74039945b6bsm339032b3a.77 - gsmtp')
+[2025-04-29 21:25:33] [INFO] [app] [PID:61956] [Thread:47828] [manage_questions_intern.py:33] [Ruta:N/A] Correo interno enviado exitosamente.
+[2025-04-30 01:48:26] [INFO] [app] [PID:61724] [Thread:63212] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13327889325
+[2025-04-30 02:04:01] [INFO] [app] [PID:62440] [Thread:18040] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510056
+[2025-04-30 02:04:01] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:62440] [Thread:18040] [opentelemetry_tracing.py:66] [Ruta:/webhook] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-30 02:04:01] [DEBUG] [google.auth.transport.requests] [PID:62440] [Thread:18040] [requests.py:185] [Ruta:/webhook] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-30 02:04:02] [ERROR] [app] [PID:62440] [Thread:18040] [blueprint_preventa.py:85] [Ruta:/webhook] Error al procesar la pregunta: /questions/13328510056. Detalles: 404 Not found: Dataset guias-locales-test:zamplin_mercadolibre was not found in location US; reason: notFound, message: Not found: Dataset guias-locales-test:zamplin_mercadolibre was not found in location US
+
+Location: US
+Job ID: 30be1b6e-ad70-465e-bfda-f04110637c9e
+
+[2025-04-30 02:04:05] [INFO] [app] [PID:62440] [Thread:18040] [manage_questions_intern.py:33] [Ruta:/webhook] Correo interno enviado exitosamente.
+[2025-04-30 02:04:40] [INFO] [app] [PID:17108] [Thread:14904] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510136
+[2025-04-30 02:04:40] [DEBUG] [google.cloud.bigquery.opentelemetry_tracing] [PID:17108] [Thread:14904] [opentelemetry_tracing.py:66] [Ruta:/webhook] This service is instrumented using OpenTelemetry. OpenTelemetry or one of its components could not be imported; please add compatible versions of opentelemetry-api and opentelemetry-instrumentation packages in order to get BigQuery Tracing data.
+[2025-04-30 02:04:40] [DEBUG] [google.auth.transport.requests] [PID:17108] [Thread:14904] [requests.py:185] [Ruta:/webhook] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-30 02:04:42] [INFO] [app] [PID:17108] [Thread:14904] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:04:42] [DEBUG] [app] [PID:17108] [Thread:14904] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510136
+[2025-04-30 02:04:43] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_init.py:26] [Ruta:/webhook] Texto de la pregunta 13328510136 obtenido exitosamente.
+[2025-04-30 02:04:43] [DEBUG] [google.auth.transport.requests] [PID:17108] [Thread:14904] [requests.py:185] [Ruta:/webhook] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-30 02:04:44] [WARNING] [app] [PID:17108] [Thread:14904] [filter_questions.py:22] [Ruta:/webhook] La tabla 'preventa_question_init' no existe. Se procederá a crearla.
+[2025-04-30 02:04:44] [INFO] [app] [PID:17108] [Thread:14904] [filter_questions.py:30] [Ruta:/webhook] Tabla 'preventa_question_init' creada exitosamente en el dataset 'mercadolibre'.
+[2025-04-30 02:04:46] [INFO] [app] [PID:17108] [Thread:14904] [filter_questions.py:72] [Ruta:/webhook] Pregunta 13328510136 registrada exitosamente en BigQuery -> preventa_question_init.
+[2025-04-30 02:04:46] [DEBUG] [google.auth.transport.requests] [PID:17108] [Thread:14904] [requests.py:185] [Ruta:/webhook] Making request: POST https://oauth2.googleapis.com/token
+[2025-04-30 02:04:49] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:34] [Ruta:/webhook] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-30 02:04:53] [INFO] [app] [PID:17108] [Thread:14904] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: categories_json ejecutado con éxito
+[2025-04-30 02:04:57] [INFO] [app] [PID:17108] [Thread:14904] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:04:57] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:45] [Ruta:/webhook] Ejecutando modelo para responder al cliente.
+[2025-04-30 02:05:01] [INFO] [app] [PID:17108] [Thread:14904] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: indefinido ejecutado con éxito
+[2025-04-30 02:05:08] [INFO] [app] [PID:17108] [Thread:14904] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:05:08] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:83] [Ruta:/webhook] Ejecutando filtro FALLBACK
+[2025-04-30 02:05:08] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:88] [Ruta:/webhook] La respuesta del bot paso el filtro FALLBACK
+[2025-04-30 02:05:08] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:55] [Ruta:/webhook] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-30 02:05:11] [INFO] [app] [PID:17108] [Thread:14904] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: audit_json ejecutado con éxito
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:124] [Ruta:/webhook] La respuesta no paso con exito la auditoria.
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:83] [Ruta:/webhook] Ejecutando filtro FALLBACK
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:88] [Ruta:/webhook] La respuesta del bot paso el filtro FALLBACK
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_llm.py:131] [Ruta:/webhook] Se envia la respuesta sugerida por bot auditor
+[2025-04-30 02:05:19] [INFO] [app] [PID:17108] [Thread:14904] [llm_consumption.py:86] [Ruta:/webhook] guardando datos de consumo en llm_consumption
+[2025-04-30 02:05:19] [WARNING] [app] [PID:17108] [Thread:14904] [llm_consumption.py:50] [Ruta:/webhook] La tabla 'llm_consumption' no existe. Creándola ahora.
+[2025-04-30 02:05:20] [INFO] [app] [PID:17108] [Thread:14904] [llm_consumption.py:79] [Ruta:/webhook] Tabla 'llm_consumption' creada exitosamente en el dataset 'mercadolibre'.
+[2025-04-30 02:05:20] [INFO] [app] [PID:17108] [Thread:14904] [llm_consumption.py:108] [Ruta:/webhook] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-30 02:05:21] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_init.py:57] [Ruta:/webhook] Respuesta enviada exitosamente para la pregunta 13328510136.
+[2025-04-30 02:05:21] [INFO] [app] [PID:17108] [Thread:62072] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510136
+[2025-04-30 02:05:23] [INFO] [app] [PID:17108] [Thread:62072] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:05:23] [DEBUG] [app] [PID:17108] [Thread:62072] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510136
+[2025-04-30 02:05:23] [INFO] [app] [PID:17108] [Thread:14904] [manage_questions_intern.py:33] [Ruta:/webhook] Correo interno enviado exitosamente.
+[2025-04-30 02:05:23] [WARNING] [app] [PID:17108] [Thread:62072] [blueprint_preventa.py:28] [Ruta:/webhook] La pregunta 13328510136 ya ha sido respondida anteriormente.
+[2025-04-30 02:07:47] [INFO] [app] [PID:17108] [Thread:60428] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13327893185
+[2025-04-30 02:07:49] [INFO] [app] [PID:17108] [Thread:60428] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:07:49] [DEBUG] [app] [PID:17108] [Thread:60428] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13327893185
+[2025-04-30 02:07:49] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_init.py:26] [Ruta:/webhook] Texto de la pregunta 13327893185 obtenido exitosamente.
+[2025-04-30 02:07:50] [INFO] [app] [PID:17108] [Thread:60428] [filter_questions.py:20] [Ruta:/webhook] La tabla 'preventa_question_init' ya existe en el dataset 'mercadolibre'.
+[2025-04-30 02:07:52] [INFO] [app] [PID:17108] [Thread:60428] [filter_questions.py:72] [Ruta:/webhook] Pregunta 13327893185 registrada exitosamente en BigQuery -> preventa_question_init.
+[2025-04-30 02:07:55] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:34] [Ruta:/webhook] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-30 02:07:59] [INFO] [app] [PID:17108] [Thread:60428] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: categories_json ejecutado con éxito
+[2025-04-30 02:08:03] [INFO] [app] [PID:17108] [Thread:60428] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:08:03] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:45] [Ruta:/webhook] Ejecutando modelo para responder al cliente.
+[2025-04-30 02:08:06] [INFO] [app] [PID:17108] [Thread:60428] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: indefinido ejecutado con éxito
+[2025-04-30 02:08:13] [INFO] [app] [PID:17108] [Thread:60428] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:08:13] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:83] [Ruta:/webhook] Ejecutando filtro FALLBACK
+[2025-04-30 02:08:13] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:88] [Ruta:/webhook] La respuesta del bot paso el filtro FALLBACK
+[2025-04-30 02:08:13] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:55] [Ruta:/webhook] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-30 02:08:16] [INFO] [app] [PID:17108] [Thread:60428] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: audit_json ejecutado con éxito
+[2025-04-30 02:08:22] [INFO] [app] [PID:17108] [Thread:60428] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:08:22] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_llm.py:119] [Ruta:/webhook] La respuesta paso con exito la auditoria.
+[2025-04-30 02:08:22] [INFO] [app] [PID:17108] [Thread:60428] [llm_consumption.py:86] [Ruta:/webhook] guardando datos de consumo en llm_consumption
+[2025-04-30 02:08:23] [INFO] [app] [PID:17108] [Thread:60428] [llm_consumption.py:48] [Ruta:/webhook] El esquema de la tabla ya está actualizado.
+[2025-04-30 02:08:23] [INFO] [app] [PID:17108] [Thread:60428] [llm_consumption.py:108] [Ruta:/webhook] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-30 02:08:23] [INFO] [app] [PID:17108] [Thread:15228] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510056
+[2025-04-30 02:08:23] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_init.py:57] [Ruta:/webhook] Respuesta enviada exitosamente para la pregunta 13327893185.
+[2025-04-30 02:08:24] [INFO] [app] [PID:17108] [Thread:55656] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13327893185
+[2025-04-30 02:08:25] [INFO] [app] [PID:17108] [Thread:15228] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:08:25] [DEBUG] [app] [PID:17108] [Thread:15228] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510056
+[2025-04-30 02:08:26] [INFO] [app] [PID:17108] [Thread:55656] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:08:26] [DEBUG] [app] [PID:17108] [Thread:55656] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13327893185
+[2025-04-30 02:08:26] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_init.py:26] [Ruta:/webhook] Texto de la pregunta 13328510056 obtenido exitosamente.
+[2025-04-30 02:08:26] [INFO] [app] [PID:17108] [Thread:60428] [manage_questions_intern.py:33] [Ruta:/webhook] Correo interno enviado exitosamente.
+[2025-04-30 02:08:26] [WARNING] [app] [PID:17108] [Thread:55656] [blueprint_preventa.py:28] [Ruta:/webhook] La pregunta 13327893185 ya ha sido respondida anteriormente.
+[2025-04-30 02:08:27] [INFO] [app] [PID:17108] [Thread:15228] [filter_questions.py:20] [Ruta:/webhook] La tabla 'preventa_question_init' ya existe en el dataset 'mercadolibre'.
+[2025-04-30 02:08:29] [INFO] [app] [PID:17108] [Thread:15228] [filter_questions.py:72] [Ruta:/webhook] Pregunta 13328510056 registrada exitosamente en BigQuery -> preventa_question_init.
+[2025-04-30 02:08:32] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:34] [Ruta:/webhook] Ejecutando modelo para clasificar la pregunta del cliente
+[2025-04-30 02:08:35] [INFO] [app] [PID:17108] [Thread:15228] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: categories_json ejecutado con éxito
+[2025-04-30 02:08:40] [INFO] [app] [PID:17108] [Thread:15228] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:08:40] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:45] [Ruta:/webhook] Ejecutando modelo para responder al cliente.
+[2025-04-30 02:08:44] [INFO] [app] [PID:17108] [Thread:15228] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: indefinido ejecutado con éxito
+[2025-04-30 02:08:53] [INFO] [app] [PID:17108] [Thread:15228] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:08:53] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:83] [Ruta:/webhook] Ejecutando filtro FALLBACK
+[2025-04-30 02:08:53] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:88] [Ruta:/webhook] La respuesta del bot paso el filtro FALLBACK
+[2025-04-30 02:08:53] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:55] [Ruta:/webhook] Ejecutando modelo para auditar respuesta del bot.
+[2025-04-30 02:08:56] [INFO] [app] [PID:17108] [Thread:15228] [llm_prompts.py:21] [Ruta:/webhook] Get prompt: audit_json ejecutado con éxito
+[2025-04-30 02:09:02] [INFO] [app] [PID:17108] [Thread:15228] [llm_switch.py:20] [Ruta:/webhook] Modelo utilizado: deepseek-chat
+[2025-04-30 02:09:02] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_llm.py:119] [Ruta:/webhook] La respuesta paso con exito la auditoria.
+[2025-04-30 02:09:02] [INFO] [app] [PID:17108] [Thread:15228] [llm_consumption.py:86] [Ruta:/webhook] guardando datos de consumo en llm_consumption
+[2025-04-30 02:09:02] [INFO] [app] [PID:17108] [Thread:15228] [llm_consumption.py:48] [Ruta:/webhook] El esquema de la tabla ya está actualizado.
+[2025-04-30 02:09:03] [INFO] [app] [PID:17108] [Thread:15228] [llm_consumption.py:108] [Ruta:/webhook] Consumo de LLM registrado exitosamente en BigQuery -> llm_consumption.
+[2025-04-30 02:09:03] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_init.py:57] [Ruta:/webhook] Respuesta enviada exitosamente para la pregunta 13328510056.
+[2025-04-30 02:09:04] [INFO] [app] [PID:17108] [Thread:40496] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510056
+[2025-04-30 02:09:05] [INFO] [app] [PID:17108] [Thread:40496] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:09:05] [DEBUG] [app] [PID:17108] [Thread:40496] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510056
+[2025-04-30 02:09:05] [INFO] [app] [PID:17108] [Thread:15228] [manage_questions_intern.py:33] [Ruta:/webhook] Correo interno enviado exitosamente.
+[2025-04-30 02:09:06] [WARNING] [app] [PID:17108] [Thread:40496] [blueprint_preventa.py:28] [Ruta:/webhook] La pregunta 13328510056 ya ha sido respondida anteriormente.
+[2025-04-30 02:09:08] [INFO] [app] [PID:17108] [Thread:16092] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510136
+[2025-04-30 02:09:10] [INFO] [app] [PID:17108] [Thread:16092] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:09:10] [DEBUG] [app] [PID:17108] [Thread:16092] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510136
+[2025-04-30 02:09:10] [WARNING] [app] [PID:17108] [Thread:16092] [blueprint_preventa.py:28] [Ruta:/webhook] La pregunta 13328510136 ya ha sido respondida anteriormente.
+[2025-04-30 02:09:45] [INFO] [app] [PID:17108] [Thread:61572] [webhook.py:23] [Ruta:/webhook] Webhook received - Topic: questions, Resource: /questions/13328510136
+[2025-04-30 02:09:47] [INFO] [app] [PID:17108] [Thread:61572] [token_reader.py:20] [Ruta:/webhook] token obtenido exitosamente
+[2025-04-30 02:09:47] [DEBUG] [app] [PID:17108] [Thread:61572] [blueprint_preventa.py:24] [Ruta:/webhook] Procesando pregunta con ID: 13328510136
+[2025-04-30 02:09:48] [WARNING] [app] [PID:17108] [Thread:61572] [blueprint_preventa.py:28] [Ruta:/webhook] La pregunta 13328510136 ya ha sido respondida anteriormente.

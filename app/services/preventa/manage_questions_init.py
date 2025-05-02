@@ -1,11 +1,8 @@
 import requests
 from app.utils.logger import logger
-from app.utils.helpers.token_reader import return_token
-
 
 """FUNCION VERIFICAR PREGUNTAS RESPONDIDAS"""
-def is_answered(question_id):
-    access_token = return_token()
+def is_answered(question_id, access_token):
     url = f"https://api.mercadolibre.com/questions/{question_id}"
     headers = {"Authorization": f"Bearer {access_token}"}
     try:
@@ -18,11 +15,8 @@ def is_answered(question_id):
         logger.exception("Excepción al verificar el estado de la pregunta %s.", question_id)
     return False
 
-
-
 """FUNCION OBTENER TEXTO DE LA PREGUNTA"""
-def fetch_question_text(question_id):
-    access_token = return_token()
+def fetch_question_text(question_id, access_token):
     url = f"https://api.mercadolibre.com/questions/{question_id}"
     headers = {"Authorization": f"Bearer {access_token}"}
     try:
@@ -36,10 +30,8 @@ def fetch_question_text(question_id):
         logger.exception("Excepción al obtener la pregunta %s.", question_id)
     return None
 
-
 """FUNCION OBTENER ITEM SEGUN ID DE LA PREGUNTA"""
-def fetch_item_id(question_id):
-    access_token = return_token()
+def fetch_item_id(question_id, access_token):
     url = f"https://api.mercadolibre.com/questions/{question_id}"
     headers = {"Authorization": f"Bearer {access_token}"}
     try:
@@ -54,10 +46,8 @@ def fetch_item_id(question_id):
         print(f"Excepción al obtener el item_id para question_id {question_id}: {e}")
         return None
 
-
 """FUNCION ENVIAR RESPUESTA"""
-def send_response(question_id, text):
-    access_token = return_token()
+def send_response(question_id, text, access_token):
     url = "https://api.mercadolibre.com/answers"
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
     payload = {"question_id": question_id, "text": text}
@@ -72,13 +62,9 @@ def send_response(question_id, text):
     return False
 
 
-
-
-def fetch_question_details(question_id):
+def fetch_question_details(question_id, access_token):
     """Obtiene los detalles de una pregunta en MercadoLibre, incluyendo nombre del cliente, pregunta, producto y link del producto."""
-    access_token = return_token()
     headers = {"Authorization": f"Bearer {access_token}"}
-
     try:
         # Obtener datos de la pregunta
         question_url = f"https://api.mercadolibre.com/questions/{question_id}"
