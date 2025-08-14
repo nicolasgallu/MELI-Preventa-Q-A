@@ -1,154 +1,210 @@
 import json
 import re
+from json.decoder import JSONDecodeError
 from app.utils.logger import logger
 from app.config.config import COST_PER_1K_TOKENS,FALLBACK_MESSAGE
-from app.services.preventa.helpers.item_context import get_item_context
+from app.services.preventa.database.gbq_item_context import get_item_context
 from app.services.preventa.helpers.llm_switch import switch_llm_body
-from app.services.preventa.helpers.llm_consumption import load_llm_consumption
-from app.services.preventa.helpers.llm_prompts import get_prompt_json
+from app.services.preventa.helpers.llm_recomendation import suggest_response
+from app.services.preventa.database.gbq_llm_consume import load_llm_consumption
+from app.services.preventa.database.gbq_llm_prompts import get_prompt_json
 
 
+REQUIRED_KEYS = {"respuesta_valida", "razon_rechazo", "correccion_sugerida"}
 
 class ProductQuestionBot:
-    
-    def __init__(self):
-        self
 
-    def _calculate_cost(self,response_json,model):
-        """Calcula el costo en USD de cada accion del LLM"""
-        for i in COST_PER_1K_TOKENS:
-            if i == model:
-                cost_data = COST_PER_1K_TOKENS.get(model, {"input": 0, "output": 0})
-                break
-            else: continue
-        usage = response_json.get('usage', {})
-        input_cost = cost_data["costo"]["input"] / 1000 * usage.get('prompt_tokens', 0)
-        output_cost = cost_data["costo"]["output"] / 1000 * usage.get('completion_tokens', 0)
-        total_cost = input_cost + output_cost   
-        return total_cost
+    def _calculate_cost(self, response_json, model):
+        """Calculate the cost in USD of the model.
+        Args:
+            response_json: llm response metadata.
+            model: model used.
+        Returns: Cost in USD (float)
+        """
+        try:
+            logger.info(f"Running Model Usage Cost..")
+            cost_data = COST_PER_1K_TOKENS.get(model, {"costo": {"input": 0.0, "output": 0.0}})
+            usage = response_json.get("usage", {})
+            prompt_tokens = usage.get("prompt_tokens", 0)
+            completion_tokens = usage.get("completion_tokens", 0)
+            input_cost  = cost_data["costo"]["input"]  * prompt_tokens / 1000
+            output_cost = cost_data["costo"]["output"] * completion_tokens / 1000
+            return input_cost + output_cost
+        except Exception as e:
+            logger.error("Unexpected Error while calculating LLM cost", exc_info=e)
+            return 0
 
-          
 
     def _classify_question(self, question):
-        """Clasifica la pregunta en una de las categorías."""
-        logger.info(f"Ejecutando modelo para clasificar la pregunta del cliente")
-        prompt = get_prompt_json("categories_json")
-        response_json,model = switch_llm_body(prompt, question, 50, 0.2)
-        category = response_json['choices'][0]['message']['content'].strip()
-        total_cost = self._calculate_cost(response_json,model)
-        return category,total_cost
+        """Clasify the customer question within a category.
+        Args:
+            question: User Question.
+        Returns: Category (str) and total_cost (float)
+        """
+        try:
+            logger.info(f"Running Question Category Model..")
+            prompt = get_prompt_json("categories_json")
+            response_json,model = switch_llm_body(prompt, question, 200, 0.2)
+            category = response_json['choices'][0]['message']['content'].strip()
+            total_cost = self._calculate_cost(response_json,model)
+            return category,total_cost
+        except Exception as e:
+            logger.error("Unexpected Error while Running Category Model", exc_info=e)
     
-
 
     def _answering_customer (self, question, category, item_context, total_cost=0):
-        """Responde la pregunta del Customer."""
-        logger.info(f"Ejecutando modelo para responder al cliente.")
-        clusterfile = get_prompt_json(category)
-        prompt = f"{clusterfile} \n ----- \n la pregunta del cliente es sobre el siguiente producto: {item_context}"
-        response_json,model = switch_llm_body(prompt, question, 1000, 0.55)
-        response = response_json['choices'][0]['message']['content'].strip()
-        total_cost = self._calculate_cost(response_json,model)
-        return response, total_cost, model
+        """LLM Call to responde to Customer Question.
+        Args:
+            question: User Question.
+            category: Question Category.
+            item_context: Item Metadata.
+            total_cost: Cost of the Model Use.
+        Returns: response (str) , total_cost (float), model (str)
+        """
+        try:
+            logger.info(f"Running Model to Reply Customer Question..")
+            categ_prompt = get_prompt_json(category)
+            prompt = f"{categ_prompt} \n ----- \n la pregunta del cliente es sobre el siguiente producto: {item_context}"
+            response_json,model = switch_llm_body(prompt, question, 3000, 0.55)
+            response = response_json['choices'][0]['message']['content'].strip()
+            total_cost = self._calculate_cost(response_json,model)
+            return response, total_cost, model
+        except Exception as e:
+            logger.error("Unexpected Error while Running Customer Reply Model", exc_info=e)
         
 
-    def _audit_answer (self, question, item_context, response):
-        logger.info(f"Ejecutando modelo para auditar respuesta del bot.")
-        prompt = get_prompt_json("audit_json")
-        question = f"pregunta_cliente: {question} \n  contexto: {item_context} \n respuesta_llm: {response}"
-        response_json,model = switch_llm_body(prompt, question, 1000, 0.45)
-        total_cost = self._calculate_cost(response_json,model)  
-        output_text = response_json['choices'][0]['message']['content'].strip()
-        if output_text.startswith("```") and output_text.endswith("```"):
-            output_text = re.sub(r'^```(?:json)?\s*', '', output_text)
-            output_text = re.sub(r'\s*```$', '', output_text)
-     
+    #――――――――――――AUDIT AUXILIARS AND MAIN AUDIT FUNCTIOṆ̣̣̣――――――――――――
+
+    def _strip_code_fences(self, text: str):
+        """Elimina ```json … ``` si el modelo lo incluye."""
+        if text.startswith("```") and text.endswith("```"):
+            text = re.sub(r'^```(?:json)?\s*', '', text)
+            text = re.sub(r'\s*```$', '', text)
+        return text.strip()
+
+    def _parse_and_validate_audit(self, output_text: str):
+        """
+        Intenta parsear output_text como JSON y verificar keys obligatorias.
+        Devuelve el dict si todo está OK, o None en caso contrario.
+        """
         try:
-            audit_response = json.loads(output_text)
-            try:
-                if type(audit_response) is not dict:
-                    logger.error(f"Error el formato de respuesta del bot auditor no fue un diccionario.")
-                    raise ValueError
-                if not all(key in audit_response for key in ["respuesta_valida", "razon_rechazo", "correccion_sugerida"]):
-                    logger.error(f"Error el formato de respuesta del bot auditor no contiene algunas de las claves necesarias.")
-                    raise ValueError
-                else:
-                    return audit_response,total_cost,model
-            except:
-                return total_cost
-        except:
-            logger.error("Audit Bot fallo al procesar el json.loads:")   
-            return total_cost
+            payload = json.loads(output_text)
+        except JSONDecodeError as e:
+            logger.error("JSON inválido en auditoría: %s", output_text, exc_info=e)
+            return None
+
+        if not isinstance(payload, dict):
+            logger.error("Respuesta de auditoría no es un dict: %r", payload)
+            return None
+
+        faltantes = REQUIRED_KEYS - payload.keys()
+        if faltantes:
+            logger.error("Faltan claves en auditoría: %s", faltantes)
+            return None
+
+        return payload
+
+    def _audit_answer(self, question, item_context, response):
+        logger.info("Running Audit Bot…")
+        prompt = get_prompt_json("audit_json")
+        full_input = (
+            f"pregunta_cliente: {question}\n"
+            f"contexto: {item_context}\n"
+            f"respuesta_llm: {response}"
+        )
+
+        response_json, model = switch_llm_body(prompt, full_input, 3000, 0.45)
+        total_cost = self._calculate_cost(response_json, model)
+        raw = response_json['choices'][0]['message']['content']
+        cleaned = self._strip_code_fences(raw)
+
+        audit_payload = self._parse_and_validate_audit(cleaned)
+        if audit_payload:
+            return audit_payload, total_cost, model
+        # Si llegamos acá, la auditoría falló: devolvemos solo el coste >>validar como levantar el error.
+        return total_cost
+
+
+#――――――――――――FILTER ANSWER――――――――――――
 
     def _filter_output(self,response):
-        logger.info(f"Ejecutando filtro FALLBACK")
-        if "humano" in response.lower() or "vendedor" in response.lower():
-            logger.info(f"La respuesta del bot cae en el filtro FALLBACK")
+        if "humano" in response.lower():
+            logger.info(f"Falls in Direct Fallback Filter. ❌")
             return True
         else:
-            logger.info(f"La respuesta del bot paso el filtro FALLBACK")
+            logger.info(f"Passed the Direct Fallback Filter. ✅")
             return False
 
+#――――――――――――MAIN FUNCTION――――――――――――
 
-
-    def _execute_bot(self,question,item_context,item_id,item_name):
-
+    def _execute_bot(self, user_id=str, question=str, item_context=str, item_id=str, item_name=str):
         total_cost = 0
-        category,new_cost = self._classify_question(question)
-        total_cost+=new_cost
-        bot_answer,new_cost,model = self._answering_customer(question=question, category=category, item_context=item_context,total_cost=total_cost)
-        total_cost+=new_cost
+        feedback = ""
+        reason = ""
 
-        if self._filter_output(bot_answer): 
-            load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback="", bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
+        #0) Classify the question & calculating acumulated cost.
+        category, new_cost = self._classify_question(question)
+        total_cost += new_cost
+
+        #1) Running LLM recomendation System.
+        if category == "busqueda_inventario":
+            answer = suggest_response(user_id,question)
+            if self._filter_output(answer):
+                return FALLBACK_MESSAGE
+            else:
+                return answer
+
+        #2) Generate Bot Reply & calculating acumulated cost.
+        answer, new_cost, model = self._answering_customer(question, category, item_context,total_cost)
+        total_cost += new_cost
+        
+        #3) Direct Filters & Auditing Bot Reply.
+            #a. direct fallback filter
+        if self._filter_output(answer): 
+            load_llm_consumption(item_id, item_name, question, category, answer, False, feedback, False, reason, total_cost, model)
             return FALLBACK_MESSAGE
         
-        
-        audit_tuple = self._audit_answer(question, item_context, bot_answer)
-
+            #b. auditing bot reply
         try:
-            if len(audit_tuple) > 2:
-                audit_dict = audit_tuple[0]
-                new_cost = audit_tuple[1]
-                model = audit_tuple[2]
-                audit_answer = audit_dict["respuesta_valida"]
-                bot_feedback = audit_dict["correccion_sugerida"]
-                bot_feedback_reason = audit_dict["razon_rechazo"]
-                total_cost += new_cost
-
-                if audit_answer is True or audit_answer == "True" or audit_answer == "true":
-                    logger.info(f"La respuesta paso con exito la auditoria.")
-                    load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=True, bot_feedback="", bot_feedback_sent=False, total_cost=total_cost,bot_model=model)
-                    return bot_answer
-
-                elif len(bot_feedback) > 10:
-                    logger.info(f"La respuesta no paso con exito la auditoria.")
-                    if self._filter_output(bot_feedback): 
-                        load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, 
-                                             bot_feedback=bot_feedback, bot_feedback_sent=False, bot_feedback_reason=bot_feedback_reason,
-                                             total_cost=total_cost,bot_model=model)
-                        return FALLBACK_MESSAGE
-                    else:
-                        logger.info(f"Se envia la respuesta sugerida por bot auditor")
-                        load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, 
-                                             bot_feedback=bot_feedback, bot_feedback_sent=True, bot_feedback_reason=bot_feedback_reason,
-                                             total_cost=total_cost,bot_model=model) 
-                        return bot_feedback                
-        except:
-            new_cost = audit_tuple[0]
+            audit_payload, new_cost, model = self._audit_answer(question, item_context, answer)
+            bool_valid = audit_payload["respuesta_valida"]
+            feedback = audit_payload["correccion_sugerida"]
+            reason = audit_payload["razon_rechazo"]
             total_cost += new_cost
-            load_llm_consumption(item_id, item_name, question, category, bot_answer, bot_answer_sent=False, bot_feedback=bot_feedback, bot_feedback_sent=False, total_cost=total_cost,bot_model=model) 
-            return FALLBACK_MESSAGE
-                    
-    
 
-    def generate_llm_response(self,question,item_id):
+            #c. bot reply passed audit control.
+            if bool_valid is True or str(bool_valid).lower() == "true":
+                logger.info(f"Bot Reply passed the Audit Control. ✅")
+                load_llm_consumption(item_id, item_name, question, category, answer, True, feedback, False, reason ,total_cost, model)
+                return answer
+            
+            #d. bot reply did not passed audit control.
+            elif len(feedback) > 10:
+                logger.info(f"Bot Audit returned a Feedback.")
+                if self._filter_output(feedback): 
+                    load_llm_consumption(item_id, item_name, question, category, answer, False, feedback, False, reason, total_cost, model)
+                    return FALLBACK_MESSAGE
+                else:
+                    logger.info(f"Bot Audit Feedback is good to use. ✅")
+                    load_llm_consumption(item_id, item_name, question, category, answer, False, feedback, True, reason, total_cost, model)
+                    return feedback         
+                       
+        except Exception as e:
+            logger.error("Unexpected Error while Running Audit Model, returning FallBack Reply.. ", exc_info=e)
+            total_cost += new_cost
+            load_llm_consumption(item_id, item_name, question, category, answer, False, feedback, False, reason, total_cost, model)
+            return FALLBACK_MESSAGE
+            
+
+
+
+    def generate_llm_response(self, user_id, question, item_id):
         try:
             item_context = get_item_context(item_id)
             if not item_context:
-                logger.warning(f"No se pudo obtener contexto para el ítem {item_id} CONTEXTO: {item_context}.")
+                logger.error(f"There is not context for the following item: {item_id}, runngin FallBack Reply")
                 return FALLBACK_MESSAGE
-            
-            item_id = item_context["item_id"]
+
             item_name = item_context["title"]
             item_context =  { 
                 "product_name" : item_context["title"], 
@@ -159,11 +215,10 @@ class ProductQuestionBot:
                 "warranty" : item_context["warranty"], 
                 "boolean_free_shipping" : item_context["boolean_free_shipping"], 
                 "direccion_local" : item_context["direccion_local"]}
-            
-            return self._execute_bot(question,item_context,item_id,item_name)
+            return self._execute_bot(user_id, question, item_context, item_id, item_name)
         
         except Exception as e:
-            logger.error("Error de respuesta por parte del LLM",e)
+            logger.error("Unexpected Error while starting running Bot Model, Running Fallback Reply Instead.",exc_info=e)
             return FALLBACK_MESSAGE
 
         
