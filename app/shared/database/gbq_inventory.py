@@ -5,7 +5,7 @@ from google.api_core.exceptions import NotFound
 from google.oauth2.service_account import Credentials
 
 # Inicializar las credenciales y cliente de BigQuery
-credentials = Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
+credentials = Credentials.from_service_account_info(GOOGLE_APPLICATION_CREDENTIALS)
 client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
 TABLE_ID = f"{client.project}.{DATASET_ID}.{TABLE_INVENTORY}"

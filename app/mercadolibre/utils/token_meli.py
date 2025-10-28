@@ -4,7 +4,7 @@ from google.oauth2.service_account import Credentials
 from google.cloud import bigquery
 
 def token_meli(user_id):
-    credentials = Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
+    credentials = Credentials.from_service_account_info(GOOGLE_APPLICATION_CREDENTIALS)
     CLIENT = bigquery.Client(credentials=credentials, project=credentials.project_id)
     table_path = f"{CLIENT.project}.{DATASET_ID}.{TABLE_CREDENTIALS}"
     QUERY = (

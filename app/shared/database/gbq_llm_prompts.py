@@ -4,7 +4,7 @@ from google.oauth2.service_account import Credentials
 from google.cloud import bigquery, bigquery_storage
 
 
-credentials = Credentials.from_service_account_file(GOOGLE_APPLICATION_CREDENTIALS)
+credentials = Credentials.from_service_account_info(GOOGLE_APPLICATION_CREDENTIALS)
 client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
 TABLE_PROMPTS = f"{client.project}.{DATASET_ID}.{TABLE_PROMPTS}"
