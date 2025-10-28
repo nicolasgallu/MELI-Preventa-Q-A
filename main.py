@@ -1,5 +1,5 @@
 from app import create_app
-from app.config.config import FLASK_PORT
+from app.shared.core.settings import FLASK_PORT
 
 app = create_app()
 if __name__ == "__main__":

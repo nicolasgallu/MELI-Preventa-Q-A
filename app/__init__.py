@@ -1,6 +1,6 @@
 from flask import Flask
-from app.blueprints.blueprint_preventa import preventa_bp
-from app.blueprints.blueprint_wpp import wpp_bp
+from app.mercadolibre.blueprints.pre_sell import preventa_bp
+from app.whatsapp.blueprints.human_reply import wpp_bp
 
 def create_app():
     app = Flask(__name__)

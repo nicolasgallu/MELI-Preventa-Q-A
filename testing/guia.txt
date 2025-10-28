@@ -1,4 +1,0 @@
-docker build -t meli-image .
-docker build -t wpp-image .
-docker run -d --name=wpp-service  --network=client-messages -p 8000:8000 wpp-image
-docker run -d --name=meli-service --network=client-messages -p 5001:5001 meli-image
