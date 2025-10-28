@@ -2,6 +2,8 @@ from sqlalchemy import (
     create_engine, MetaData, Table, Column,
     String, JSON, insert
 )
+from app.shared.core.logger import logger
+
 
 class DBInsertManager:
     def __init__(self):
@@ -43,12 +45,16 @@ class DBInsertManager:
 
     def insert_questions(self, question_id, data):
         """Insert Questions Received and Metadata"""
-        stmt = insert(self.questions).values(
-            question_id=question_id,
-            data=data
-        )
-        with self.engine.begin() as conn:
-            conn.execute(stmt)
+        try:
+            stmt = insert(self.questions).values(
+                question_id=question_id,
+                data=data
+            )
+            with self.engine.begin() as conn:
+                conn.execute(stmt)
+        except Exception as e:
+            logger.exception(f"ERROR INSERTING {e}")
+
 
     def insert_items(self, question_id, data):
         """Insert Item Data related to question"""

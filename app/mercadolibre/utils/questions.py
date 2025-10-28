@@ -29,9 +29,11 @@ class QuestionsAPI():
                 question_data = response.json()
                 self.item_id = question_data.get("item_id")
                 status = question_data.get("status")
+                logger.info("CHECKING IF ANSWERED")
                 if status == "ANSWERED":
                     return False
                 else:
+                    logger.info("PASSED: IS NOT ANSWERED")
                     payload = {
                         "status":status,
                         "text":question_data.get("text"),
@@ -40,7 +42,9 @@ class QuestionsAPI():
                         "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
                         } 
                     # Inserting data
+                    logger.info("WRITTING REGISTER IN SQL")
                     self.insert.insert_questions(self.question_id, payload)
+                    logger.info("PASSED REGISTER IN SQL")
                     return payload
             logger.error(f"Error fetching question {self.question_id}: {response.json()}")
         except Exception as e:
