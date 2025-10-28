@@ -6,7 +6,7 @@ from sqlalchemy import (
 class DBInsertManager:
     def __init__(self):
         # Configuración de conexión
-        DB_HOST = "127.0.0.1"
+        DB_HOST = "10.89.48.3"
         DB_PORT = "5432"
         DB_NAME = "test_meli"
         DB_USER = "nicolas"
