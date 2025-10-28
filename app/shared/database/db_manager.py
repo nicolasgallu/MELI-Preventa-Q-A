@@ -1,4 +1,5 @@
 import os 
+import time  # <--- NUEVO: Necesario para los retrasos
 from sqlalchemy import (
     create_engine, MetaData, Table, Column,
     String, JSON, insert
@@ -10,10 +11,9 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 # --- CONFIGURACIÓN E INICIALIZACIÓN GLOBAL (Singleton) ---
 # Estas líneas se ejecutan UNA SOLA VEZ cuando el worker de Gunicorn arranca.
 
-# Usamos valores hardcodeados para el HOST, ya que estás utilizando el Proxy de Cloud SQL
-# que escucha en 127.0.0.1 dentro del contenedor.
 DB_HOST = "127.0.0.1" 
 DB_PORT = "5432"
+# Asegúrate de que estos valores sean EXACTAMENTE los correctos para tu DB
 DB_NAME = "test_meli"
 DB_USER = "nicolas"
 DB_PASS = "Pinguin0!"
@@ -47,17 +47,32 @@ ai_responses_table = Table(
     Column("response", JSON),
 )
 
-# 3. Intento de Creación de Tablas (Solo se ejecuta UNA VEZ al arrancar el Worker)
-try:
-    METADATA.create_all(ENGINE)
-    print("DEBUG: Tablas verificadas/creadas exitosamente al inicio del worker.")
-except (OperationalError, ProgrammingError) as e:
-    # Si la conexión falla aquí (p. ej., por problema de IAM o Proxy no listo), 
-    # el worker no colapsa, solo registramos el error inicial.
-    print(f"ERROR CRÍTICO EN SETUP: Falló la conexión inicial a 127.0.0.1 (Proxy).")
-    logger.exception(f"ERROR CRÍTICO EN SETUP: {e}")
-except Exception as e:
-    logger.exception(f"ERROR INESPERADO en setup de DB: {e}")
+# 3. Intento de Creación de Tablas con Retraso y Reintento
+# Esto resuelve la "carrera de condición" donde el Proxy no ha terminado de arrancar en 5432
+MAX_RETRIES = 10  # Número máximo de intentos
+RETRY_DELAY = 10  # Retraso en segundos entre cada intento
+
+for attempt in range(MAX_RETRIES):
+    try:
+        if attempt > 0:
+            # Esperamos ANTES de intentar la conexión, dándole tiempo al Proxy
+            print(f"DEBUG: Conexión al Proxy fallida. Esperando {RETRY_DELAY}s... (Intento {attempt + 1}/{MAX_RETRIES})")
+            time.sleep(RETRY_DELAY) 
+
+        # Esto intenta la conexión y la creación de tablas
+        METADATA.create_all(ENGINE)
+        print("DEBUG: Tablas verificadas/creadas exitosamente al inicio del worker.")
+        break  # Si tiene éxito, salimos del bucle
+    except (OperationalError, ProgrammingError) as e:
+        if attempt == MAX_RETRIES - 1:
+            # Si fallamos en el último intento, registramos el error crítico
+            print("ERROR CRÍTICO EN SETUP: Falló la conexión inicial a 127.0.0.1 (Proxy) después de varios intentos.")
+            logger.exception(f"ERROR CRÍTICO EN SETUP: {e}")
+            # No re-lanzamos la excepción aquí, permitiendo que el worker se inicie.
+            # Las inserciones posteriores seguirán fallando hasta que se arregle la causa raíz.
+    except Exception as e:
+        logger.exception(f"ERROR INESPERADO en setup de DB: {e}")
+        break
 
 
 # --- CLASE DE INSERCIÓN (Para uso en runtime) ---
