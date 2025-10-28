@@ -22,10 +22,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Exponer el puerto (es solo informativo en Cloud Run, pero se mantiene)
 EXPOSE 8080
 
-# Comando de inicio: Usar el formato de lista (exec form)
-# 1. Se elimina 'sh -c'
-# 2. Se elimina '--reload' y 'watchdog'
-# 3. Se usa $PORT para que Gunicorn escuche en el puerto que Cloud Run asigne.
-CMD ["gunicorn", "--bind", "0.0.0.0:${PORT}", "main:app"]
-# NOTA: Reemplaza "main:app" si tu objeto Flask no está en main.py o se llama diferente.
-# Ejemplo: Si la app está en 'app/main.py' y se llama 'app', usa: "app.main:app"
+# Comando de inicio: Usar el formato SHELL para que $PORT se expanda.
+# Importante: Se eliminan --reload y watchdog, ya que no son para producción.
+CMD gunicorn --bind 0.0.0.0:${PORT} main:app
