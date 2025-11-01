@@ -18,7 +18,7 @@ def pipeline(user_id, question_id):
 
     # Filter if Answered
     if question_data == False:
-        logger.info("Question Already Answered - Nothing to Do.")
+        logger.info("Question Already Answered or in DB - Nothing to Do.")
         return http_response("status", message="question_responded", http_code=200)
     
     # Calling ItemsAPI

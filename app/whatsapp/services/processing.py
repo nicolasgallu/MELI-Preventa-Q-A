@@ -6,22 +6,6 @@ from datetime import datetime
 import hashlib
 import hmac
 
-def wh_activation(request):
-    """
-    Returns to Meta the corresponded validation to activate the webhook.\n
-    Requires: a **VERYFY_TOKEN** value that is seted in **.env** file and it needs
-    to be the same in "Identificador de verificación" inside **Meta Webhook config**. 
-    """
-    mode = request.args.get('hub.mode')
-    token = request.args.get('hub.verify_token')
-    challenge = request.args.get('hub.challenge')
-    if mode == 'subscribe' and token == VERIFY_WHOOK:
-        logger.info("Webhook verified successfully.")
-        return make_response(challenge, 200)
-    else:
-        logger.warning("Webhook verification failed.")
-        return make_response('Forbidden', 403)
-
 def sign_validation(request):
     """
     Validates the authenticity of incoming webhook POST requests from Meta.
@@ -44,9 +28,7 @@ def sign_validation(request):
         return False
 
 def message_processing(request):
-    if request.method =='GET':
-        return wh_activation(request)
-    if request.method =='POST' and request.get_json():
+        
         if sign_validation(request) == False:
             return make_response('Forbidden', 403)
         else:
