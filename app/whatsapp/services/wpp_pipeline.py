@@ -32,7 +32,7 @@ def pipeline(request):
     question_data = question.get_question_data()
     
     # Filter if Answered
-    if question_data == False:
+    if question_data == "already_answered":
         logger.info("Question Already Answered - Nothing to Do.")
         return http_response("status", message="question_responded", http_code=200)
     

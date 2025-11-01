@@ -17,7 +17,7 @@ def pipeline(user_id, question_id):
     question_data = question.get_question_data()
 
     # Filter if Answered
-    if question_data == False:
+    if question_data == "already_answered" or question_data == "already_registered":
         logger.info("Question Already Answered or in DB - Nothing to Do.")
         return http_response("status", message="question_responded", http_code=200)
     

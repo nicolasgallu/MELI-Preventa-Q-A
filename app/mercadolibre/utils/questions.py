@@ -30,10 +30,11 @@ class QuestionsAPI():
                 self.item_id = question_data.get("item_id")
                 status = question_data.get("status")
                 logger.info("CHECKING IF ANSWERED")
-                if status == "ANSWERED" or self.dbmanager.question_exists(self.question_id) == True:
-                    return False
+                if status == "ANSWERED":
+                    return "already_answered"
+                if self.dbmanager.question_exists(self.question_id) == True:
+                    return "already_registered"
                 else:
-                    logger.info("PASSED: IS NOT ANSWERED")
                     payload = {
                         "status":status,
                         "text":question_data.get("text"),
