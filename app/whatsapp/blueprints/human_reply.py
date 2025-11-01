@@ -10,6 +10,6 @@ def handle_webhook():
     if request.method =='GET':
         logger.info("Processing GET Request from WPP")
         return wh_activation(request)
-    if request.method =='POST':
+    if request.method =='POST' and request.get_json():
         logger.info("Processing POST Request from WPP")
-        pipeline(request)
+        return pipeline(request)
