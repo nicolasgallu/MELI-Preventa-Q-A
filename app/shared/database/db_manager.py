@@ -80,7 +80,8 @@ class DBManager:
             )
             with self.engine.connect() as conn:
                 result = conn.execute(stmt).fetchone()
-            return False if result else True
+                logger.info(f"The question ID was matched as:{result}")
+            return True if result else False
         except Exception as e:
             logger.exception(f"Error verificando existencia de pregunta {question_id}: {e}")
             return False

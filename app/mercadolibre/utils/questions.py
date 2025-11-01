@@ -30,7 +30,7 @@ class QuestionsAPI():
                 self.item_id = question_data.get("item_id")
                 status = question_data.get("status")
                 logger.info("CHECKING IF ANSWERED")
-                if status == "ANSWERED" or self.dbmanager.question_exists(self.question_id):
+                if status == "ANSWERED" or self.dbmanager.question_exists(self.question_id) == True:
                     return False
                 else:
                     logger.info("PASSED: IS NOT ANSWERED")
