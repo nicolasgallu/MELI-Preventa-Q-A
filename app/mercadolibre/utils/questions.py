@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 from app.shared.core.logger import logger
-from app.shared.database.db_manager import DBInsertManager
+from app.shared.database.db_manager import DBManager
 
 class QuestionsAPI():
     
@@ -17,7 +17,7 @@ class QuestionsAPI():
         # Varibale
         self.item_id = None        
         # DB Manager
-        self.insert = DBInsertManager()
+        self.dbmanager = DBManager()
 
 
     def get_question_data(self):
@@ -30,7 +30,7 @@ class QuestionsAPI():
                 self.item_id = question_data.get("item_id")
                 status = question_data.get("status")
                 logger.info("CHECKING IF ANSWERED")
-                if status == "ANSWERED":
+                if status == "ANSWERED" or self.dbmanager.question_exists(self.question_id):
                     return False
                 else:
                     logger.info("PASSED: IS NOT ANSWERED")
@@ -43,7 +43,7 @@ class QuestionsAPI():
                         } 
                     # Inserting data
                     logger.info("WRITTING REGISTER IN SQL")
-                    self.insert.insert_questions(self.question_id, payload)
+                    self.dbmanager.insert_questions(self.question_id, payload)
                     logger.info("PASSED REGISTER IN SQL")
                     return payload
             logger.error(f"Error fetching question {self.question_id}: {response.json()}")
@@ -100,7 +100,7 @@ class QuestionsAPI():
                 "permalink": data.get("permalink")
             }
             # Inserting data
-            self.insert.insert_items(self.question_id, payload)
+            self.dbmanager.insert_items(self.question_id, payload)
             return payload
         except Exception as e:
             logger.exception(f"Exception fetching item data {self.item_id}")

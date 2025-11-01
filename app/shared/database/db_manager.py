@@ -1,43 +1,17 @@
 import os
-from sqlalchemy import create_engine, MetaData, Table, Column, String, JSON, insert
+from sqlalchemy import create_engine, MetaData, Table, Column, String, JSON, insert, select
 from sqlalchemy.exc import OperationalError, ProgrammingError
-from app.shared.core.logger import logger  # Módulo de logging centralizado
+from app.shared.core.logger import logger
 
 # ======================================================
-# CONFIGURACIÓN GLOBAL (una sola vez por worker)
+# CONFIGURACIÓN DE CONEXIÓN A CLOUD SQL
 # ======================================================
 
-# Variables de entorno requeridas
 DB_USER = os.getenv("DB_USER", "nicolas")
 DB_PASS = os.getenv("DB_PASS", "Pinguin0!")
 DB_NAME = os.getenv("DB_NAME", "test_meli")
-INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")  # p.ej. "project:region:instance"
+INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
 DB_SOCKET_DIR = os.getenv("DB_SOCKET_DIR", "/cloudsql")
-
-# Validación de entorno
-required_env_vars = ["DB_USER", "DB_PASS", "DB_NAME", "INSTANCE_CONNECTION_NAME"]
-missing = [v for v in required_env_vars if not os.getenv(v)]
-if missing:
-    logger.error(f"❌ Variables de entorno faltantes: {missing}")
-else:
-    logger.info("✅ Todas las variables de entorno necesarias están definidas.")
-
-# Log de configuración (sin exponer credenciales)
-logger.info("==== CONFIG CLOUD SQL CONNECTION ====")
-logger.info(f"DB_USER: {DB_USER}")
-logger.info(f"DB_NAME: {DB_NAME}")
-logger.info(f"INSTANCE_CONNECTION_NAME: {INSTANCE_CONNECTION_NAME}")
-logger.info(f"DB_SOCKET_DIR exists: {os.path.exists(DB_SOCKET_DIR)}")
-logger.info(f"Full expected socket path: {os.path.join(DB_SOCKET_DIR, INSTANCE_CONNECTION_NAME)}")
-logger.info(
-    f"DATABASE_URL (sanitized): "
-    f"postgresql+psycopg2://{DB_USER}:***@/{DB_NAME}?host={DB_SOCKET_DIR}/{INSTANCE_CONNECTION_NAME}"
-)
-logger.info("=====================================")
-
-# ======================================================
-# CONEXIÓN SEGURA A CLOUD SQL
-# ======================================================
 
 DATABASE_URL = (
     f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/"
@@ -47,25 +21,11 @@ DATABASE_URL = (
 try:
     ENGINE = create_engine(
         DATABASE_URL,
-        pool_pre_ping=True,    # Evita errores por conexiones cerradas
-        pool_recycle=300,      # Recicla conexiones cada 5 min
+        pool_pre_ping=True,
+        pool_recycle=300,
     )
     METADATA = MetaData()
 
-    # Función auxiliar: test de conexión inicial
-    def test_db_connection(engine):
-        try:
-            with engine.connect() as conn:
-                result = conn.execute("SELECT NOW()")
-                logger.info(f"✅ Conexión a DB exitosa. Hora actual: {list(result)[0][0]}")
-        except Exception as e:
-            logger.exception("❌ Error conectando a la DB")
-
-    test_db_connection(ENGINE)
-
-    # ======================================================
-    # DEFINICIÓN DE TABLAS
-    # ======================================================
     questions_table = Table(
         "questions",
         METADATA,
@@ -88,25 +48,21 @@ try:
         Column("response", JSON),
     )
 
-    # ⚠️ OPCIONAL: crear tablas si no existen (solo para entorno dev)
     METADATA.create_all(ENGINE)
-    logger.info("✅ Tablas verificadas o creadas exitosamente al inicio del worker.")
+    logger.info("DEBUG: Tablas verificadas/creadas exitosamente.")
 
 except (OperationalError, ProgrammingError) as e:
-    logger.exception("❌ ERROR CRÍTICO EN SETUP: No se pudo conectar o inicializar la base de datos.")
+    logger.exception(f"Error crítico conectando a Cloud SQL: {e}")
 except Exception as e:
-    logger.exception("❌ ERROR INESPERADO en setup de DB.")
+    logger.exception(f"Error inesperado en setup de DB: {e}")
 
 
 # ======================================================
-# CLASE DE INSERCIÓN A LA DB
+# CLASS DEFINTION
 # ======================================================
 
-class DBInsertManager:
-    """
-    Clase que maneja las operaciones de inserción en la DB.
-    Usa un engine SQLAlchemy global (ENGINE).
-    """
+class DBManager:
+    """Maneja las operaciones de inserción en la base de datos."""
 
     def __init__(self):
         self.engine = ENGINE
@@ -114,40 +70,41 @@ class DBInsertManager:
         self.items = items_table
         self.ai_responses = ai_responses_table
 
-    def insert_questions(self, question_id, data):
-        """Insert Questions Received and Metadata"""
+
+    def question_exists(self, question_id):
+        """
+        """
         try:
-            logger.debug(f"📝 Inserting into 'questions': question_id={question_id}")
-            stmt = insert(self.questions).values(
-                question_id=question_id,
-                data=data
+            stmt = select(self.questions.c.question_id).where(
+                self.questions.c.question_id == question_id
             )
+            with self.engine.connect() as conn:
+                result = conn.execute(stmt).fetchone()
+            return False if result else True
+        except Exception as e:
+            logger.exception(f"Error verificando existencia de pregunta {question_id}: {e}")
+            return False
+
+    def insert_questions(self, question_id, data):
+        try:
+            stmt = insert(self.questions).values(question_id=question_id, data=data)
             with self.engine.begin() as conn:
                 conn.execute(stmt)
-            logger.info(f"✅ Inserted question {question_id}")
         except Exception as e:
-            logger.exception(f"❌ ERROR INSERTING QUESTIONS: {e}")
+            logger.exception(f"Error insertando pregunta: {e}")
             raise
 
     def insert_items(self, question_id, data):
-        """Insert Item Data related to question"""
         try:
-            logger.debug(f"📝 Inserting into 'items': question_id={question_id}")
-            stmt = insert(self.items).values(
-                question_id=question_id,
-                data=data,
-            )
+            stmt = insert(self.items).values(question_id=question_id, data=data)
             with self.engine.begin() as conn:
                 conn.execute(stmt)
-            logger.info(f"✅ Inserted item {question_id}")
         except Exception as e:
-            logger.exception(f"❌ ERROR INSERTING ITEMS: {e}")
+            logger.exception(f"Error insertando item: {e}")
             raise
 
     def insert_ai_response(self, question_id, stage, response):
-        """Insert AI responses"""
         try:
-            logger.debug(f"📝 Inserting into 'ai_responses': question_id={question_id}, stage={stage}")
             stmt = insert(self.ai_responses).values(
                 question_id=question_id,
                 stage=stage,
@@ -155,7 +112,6 @@ class DBInsertManager:
             )
             with self.engine.begin() as conn:
                 conn.execute(stmt)
-            logger.info(f"✅ Inserted AI response for {question_id} at stage {stage}")
         except Exception as e:
-            logger.exception(f"❌ ERROR INSERTING AI RESPONSE: {e}")
+            logger.exception(f"Error insertando respuesta AI: {e}")
             raise

@@ -45,9 +45,9 @@ def sign_validation(request):
 
 def message_processing(request):
     if request.method =='GET':
-        return wh_activation()
+        return wh_activation(request)
     if request.method =='POST' and request.get_json():
-        if sign_validation() == False:
+        if sign_validation(request) == False:
             return make_response('Forbidden', 403)
         else:
             try:
