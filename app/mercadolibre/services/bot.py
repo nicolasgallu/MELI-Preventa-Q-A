@@ -3,7 +3,7 @@ from app.shared.core.logger import logger
 from app.shared.core.settings import FALLBACK_MESSAGE
 from app.shared.database.gbq_inventory import get_inventory
 from app.shared.database.gbq_llm_prompts import get_prompt_json
-from app.shared.database.db_manager import DBInsertManager
+from app.shared.database.db_manager import DBManager
 from app.mercadolibre.utils.ai_switch import AiSwitch
 
 
@@ -17,7 +17,7 @@ class AiPreOrder:
         # variables
         self.category = None
         self.ai_payload = None
-        self.insert = DBInsertManager()
+        self.insert = DBManager()
 
     def classify_question(self):
         """
