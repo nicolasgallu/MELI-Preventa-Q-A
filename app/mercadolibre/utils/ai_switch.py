@@ -76,8 +76,10 @@ class AiSwitch():
         try:
             logger.info("Trying to Run Deepseek Model..")
             data = self._call_deepseek()
-            logger.info("Deepseek AI Success Run.")
+            logger.info(f"Deepseek AI Success Run: {data}")
             return data
         except Exception as e:
             logger.warning("Deepseek Failed, trying to use OpenAI Model", exc_info=e)
-            return self._call_openai()
+            data = self._call_openai()
+            logger.info(f"OpenAI Success Run: {data}")
+            return data

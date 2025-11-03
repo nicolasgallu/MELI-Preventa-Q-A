@@ -30,18 +30,18 @@ def notify_errors_intern(subject, message):
         logger.error(f"Error sending the email: {e}")
 
 
-def notify_human_wpp(question_text, question_id, item_id, user_id, item_link, item_name):
+def notify_human_wpp(question_text, question_id, item_link, item_name):
     """
         Envía un mensaje con plantilla a cada número definido en PHONE_LIST.
     """
 
     template = (
-        "⚠️ *El bot no pudo responder esta consulta.*\n\n"
+        "⚠️ *El bot no pudo responder esta consulta.*\n"
         "Por favor, respondé solo reemplazando el campo *'su respuesta aquí'*. El Bot la mejorará automáticamente, por lo que no hace falta extenderse.\n"
         "*No modifiques el resto del mensaje*, así el sistema puede procesarlo correctamente.\n\n"
-        f"*ID:* {question_id}-{user_id}-{item_id}\n"
-        f"*URL:* {item_link} \n"
-        f"*ITEM:* {item_name} \n"
+        f"*ID:* {question_id}\n"
+        f"*URL:* {item_link}\n"
+        f"*ITEM:* {item_name}\n"
         f"*PREGUNTA:* {question_text}\n\n"
         "*RESPUESTA:* <su respuesta aquí>"
     )

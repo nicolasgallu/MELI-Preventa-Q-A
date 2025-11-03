@@ -1,22 +1,20 @@
-import re
 from app.shared.core.logger import logger
+import re
 
 def create_payload(message, phone, name, timestamp):
-    """
-    Recibe un dict tipo 'message' de WhatsApp y extrae los campos estructurados
-    del cuerpo del mensaje.
-    """
-    logger.info("starting extracting")
+    logger.info("Starting Creationg of WPP Payload")
     if not isinstance(message, str):
         return logger.error(f"No se pudo obtener un cuerpo de texto válido desde el mensaje: {message}")
 
-    # Compilar el patrón para extraer los campos
+    # Compilar el patrón para extraer solo ID y RESPUESTA
     patron = re.compile(
-        r"\*ID:\*\s*(.+?)\s*\n"
-        r"\*URL:\*\s*(.+?)\s*\n"
-        r"\*ITEM:\*\s*(.+?)\s*\n"
-        r"\*PREGUNTA:\*\s*(.+?)\s*\n"
-        r"\*RESPUESTA:\*\s*(.+)",
+        # 1. Captura el ID
+        r".*\*ID:\*\s*(.+?)\s*\n"
+        # 2. Ignora las líneas URL, ITEM y PREGUNTA
+        r".*?\n"  # Ignora la línea URL
+        r".*?\n"  # Ignora la línea ITEM
+        r".*?\n"  # Ignora la línea PREGUNTA
+        r"\s*\*RESPUESTA:\*\s*(.+)", # 3. Captura la RESPUESTA
         re.IGNORECASE | re.DOTALL
     )
 
@@ -24,23 +22,16 @@ def create_payload(message, phone, name, timestamp):
     if not match:
         return logger.error("No se pudieron extraer todos los campos esperados. Verificá el formato del mensaje.")
 
-    id_str, url, item_name, question_text, raw_response = match.groups()
-
+    # Ajusta la asignación para tomar solo el primer grupo (ID) y el segundo (RESPUESTA)
+    question_id, raw_response = match.groups()
 
     try:
-        question_id, user_id, item_id = id_str.strip().split("-")
         payload = {
-            "source": "wpp",
             "phone": phone,
             "name": name,
-            "created_at":timestamp,
+            "question_id": question_id,
             "message": raw_response.strip(),
-            "user_id": user_id.strip(),
-            "question_id": question_id.strip(),
-            "item_id": item_id.strip(),
-            "url": url.strip(),
-            "item_name": item_name.strip(),
-            "question": question_text.strip(),
+            "created_at": timestamp,
             }
         return payload
     

@@ -1,6 +1,5 @@
 from app.whatsapp.utils.extraction import create_payload 
 from app.shared.core.logger import logger
-from flask import make_response
 from datetime import datetime
 
 def message_processing(request):

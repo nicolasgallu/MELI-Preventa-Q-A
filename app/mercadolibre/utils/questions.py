@@ -32,7 +32,7 @@ class QuestionsAPI():
                 logger.info("CHECKING IF ANSWERED")
                 if status == "ANSWERED":
                     return "already_answered"
-                if self.dbmanager.question_exists(self.question_id) == True:
+                if self.dbmanager.question_search(self.question_id) == True:
                     return "already_registered"
                 else:
                     payload = {

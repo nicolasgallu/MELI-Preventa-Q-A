@@ -26,7 +26,6 @@ def pipeline(user_id, question_id):
 
     # Variables
     question_text = question_data.get("text")
-    item_id = question_data.get("item_id") 
     item_link = item_data.get("permalink")
     item_name = item_data.get("title") 
 
@@ -47,13 +46,13 @@ def pipeline(user_id, question_id):
             return http_response("status", message="question_answered", http_code=200)
         except Exception as e:
             notify_errors_intern("Preventa-MeliReply-Error", e)
-            notify_human_wpp(question_text, question_id, item_id, user_id, item_link, item_name)
+            notify_human_wpp(question_text, question_id, item_link, item_name)
             return http_response("error", e, http_code=200)
         
     else:
         logger.info(f"Question deliver directly to Employee: {question_text}")
         try:
-            notify_human_wpp(question_text, question_id, item_id, user_id, item_link, item_name)
+            notify_human_wpp(question_text, question_id, item_link, item_name)
             return http_response("status", message="question_unanswered", http_code=200)
         except Exception as e:
             notify_errors_intern("Preventa-NotifyWpp-Error",e)
