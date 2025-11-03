@@ -43,7 +43,7 @@ try:
     ai_responses_table = Table(
         "ai_responses",
         METADATA,
-        Column("question_id", String, primary_key=True),
+        Column("question_id", String, primary_key=False),
         Column("stage", String),
         Column("response", JSON),
     )

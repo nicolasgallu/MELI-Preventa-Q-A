@@ -32,7 +32,7 @@ class QuestionsAPI():
                 logger.info("CHECKING IF ANSWERED")
                 if status == "ANSWERED":
                     return "already_answered"
-                if self.dbmanager.question_search(self.question_id) == True:
+                if self.dbmanager.question_search(self.question_id) != False:
                     return "already_registered"
                 else:
                     payload = {
@@ -43,9 +43,7 @@ class QuestionsAPI():
                         "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
                         } 
                     # Inserting data
-                    logger.info("WRITTING REGISTER IN SQL")
                     self.dbmanager.insert_questions(self.question_id, payload)
-                    logger.info("PASSED REGISTER IN SQL")
                     return payload
             logger.error(f"Error fetching question {self.question_id}: {response.json()}")
         except Exception as e:

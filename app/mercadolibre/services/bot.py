@@ -169,6 +169,7 @@ class AiPreOrder:
             """
             user_input = f"La respuesta del empleado que tenes que mejorar es la siguiente: {employee_reply}"
             # Instancing & API Call
+            logger.info(f"ESTE ES EL INPUT A USAR PARA LA MEJORA{user_input}")
             ai_instance = AiSwitch(full_prompt, user_input, 2500, 0.55)
             self.ai_payload = ai_instance.switch()
             response = self.ai_payload.get("response")
