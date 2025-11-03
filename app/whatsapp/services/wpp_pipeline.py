@@ -11,6 +11,9 @@ from app.mercadolibre.services.bot import AiPreOrder
 def pipeline(request):
 
     payload = message_processing(request) 
+    if payload == False:
+        logger.warning("No valid payload returned from message_processing()")
+        return http_response("status", message="ignored_message", http_code=200)
 
     source = payload["source"]
     phone = payload["phone"]

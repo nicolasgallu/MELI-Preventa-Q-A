@@ -19,7 +19,7 @@ def message_processing(request):
             return payload
         else:
             logger.warning("Message dont correspond to zamplin-Service.")
-            return make_response('', 200)         
+            return False       
     except Exception as e:
         logger.error(f"Error Extracting webhook payload: {e}")
-        return make_response('', 400)
+        return False
