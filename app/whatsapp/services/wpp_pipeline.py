@@ -35,7 +35,7 @@ def pipeline(request):
     access_token = token_meli(user_id)
     
     # Instancing Question Object
-    question_api = QuestionsAPI(user_id, question_id, access_token)
+    question_api = QuestionsAPI(user_id, question_id, access_token, item_id)
     question_data = question_api.get_question_data()
 
     # Filter if Answered

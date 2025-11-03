@@ -9,13 +9,13 @@ class QuestionsAPI():
     ANSWERS_URL = "https://api.mercadolibre.com/answers"
     ITEMS_URL = "https://api.mercadolibre.com/items"
 
-    def __init__(self, user_id, question_id, access_token):
+    def __init__(self, user_id, question_id, access_token, item_id=None):
         self.user_id = user_id
         self.question_id = question_id
         self.token = access_token  
         self.headers = {"Authorization": f"Bearer {self.token}"}
         # Varibale
-        self.item_id = None        
+        self.item_id = item_id        
         # DB Manager
         self.dbmanager = DBManager()
 
