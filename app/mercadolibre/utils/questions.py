@@ -98,8 +98,13 @@ class QuestionsAPI():
                 ).strip(),
                 "permalink": data.get("permalink")
             }
+            # Validating that item related to question dont exits
+            item = self.dbmanager.items_search(self.question_id)
             # Inserting data
-            self.dbmanager.insert_items(self.question_id, payload)
+            if item  == False:
+                self.dbmanager.insert_items(self.question_id, payload)
+            else:
+                None            
             return payload
         except Exception as e:
             logger.exception(f"Exception fetching item data {self.item_id}")

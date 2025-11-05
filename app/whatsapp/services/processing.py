@@ -5,6 +5,9 @@ from datetime import datetime
 def message_processing(request):
     try:
         data = request.get_json()
+        if data == None:
+            logger.info("Message is not from Meli-Wpp Service")
+            return False
         value = data["entry"][0]["changes"][0]["value"]
         contact = value.get("contacts", [{}])[0]
         message = (value.get("messages", [{}])[0]).get("text", {}).get("body")
@@ -17,7 +20,7 @@ def message_processing(request):
             payload = create_payload(message, phone, name, timestamp)
             return payload
         else:
-            logger.warning("Message dont correspond to zamplin-Service.")
+            logger.info("Message is not from Meli-Wpp Service")
             return False       
     except Exception as e:
         logger.error(f"Error Extracting webhook payload: {e}")

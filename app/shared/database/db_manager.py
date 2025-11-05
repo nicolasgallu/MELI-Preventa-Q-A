@@ -83,12 +83,30 @@ class DBManager:
                 if result:
                     # 'result' es un objeto Row. Accedemos al valor de la columna 'data'
                     question_data = result[0] # o result['data'] si el driver lo soporta mejor
-                    logger.info(f"Question ID {question_id} found. Data field type: {type(question_data)}")
+                    logger.info(f"Question ID {question_id} found.")
                     return question_data
                 else: 
                     return False
         except Exception as e:
             logger.exception(f"Error verificando existencia de pregunta {question_id}: {e}")
+            return False
+
+
+    def items_search(self, question_id):
+        """
+        """
+        try:
+            stmt = select(self.items.c.data).where(
+                self.items.c.question_id == question_id
+            )
+            with self.engine.connect() as conn:
+                result = conn.execute(stmt).fetchone()
+                if result:
+                    return True
+                else: 
+                    return False
+        except Exception as e:
+            logger.exception(f"Error verificando existencia de item {question_id}: {e}")
             return False
 
 
