@@ -21,8 +21,6 @@ DATABASE_URL = (
     f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@10.89.48.3/{DB_NAME}"
 )
 
-print(f"DEBUG: Intentando conectar con DATABASE_URL: {DATABASE_URL}") # <-- ¡Agregá esta línea!
-
 try:
     ENGINE = create_engine(
         DATABASE_URL,
