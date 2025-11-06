@@ -4,7 +4,7 @@ from app.shared.core.logger import logger
 from flask import Blueprint, request
 
 # BLUEPRINT CREATION
-preventa_bp = Blueprint("wh_questions", __name__, url_prefix="/webhook")
+preventa_bp = Blueprint("wh_questions", __name__, url_prefix="/questions")
 @preventa_bp.route("", methods=["POST"], strict_slashes=False)
 
 def handle_webhook():
