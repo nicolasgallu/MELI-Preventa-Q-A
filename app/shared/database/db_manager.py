@@ -10,16 +10,15 @@ import os
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
 DB_NAME = os.getenv("DB_NAME")
-#DB_SOCKET_DIR = os.getenv("DB_SOCKET_DIR")
-#INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
+DB_SOCKET_DIR = os.getenv("DB_SOCKET_DIR")
+INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
 
-#DATABASE_URL = (
-#    f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/"
-#    f"{DB_NAME}?host={DB_SOCKET_DIR}/{INSTANCE_CONNECTION_NAME}"
-#)
 DATABASE_URL = (
-    f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@10.89.48.3/{DB_NAME}"
+    f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/"
+    f"{DB_NAME}?host={DB_SOCKET_DIR}/{INSTANCE_CONNECTION_NAME}"
 )
+
+logger.info(f"DATABASE URL: {DATABASE_URL}")
 
 try:
     ENGINE = create_engine(
