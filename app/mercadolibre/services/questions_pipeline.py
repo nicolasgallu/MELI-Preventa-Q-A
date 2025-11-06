@@ -5,6 +5,8 @@ from app.shared.core.http_response import http_response
 from app.mercadolibre.utils.questions import QuestionsAPI
 from app.mercadolibre.utils.notifications import notify_human_wpp,notify_errors_intern
 from app.mercadolibre.services.bot import AiPreOrder
+from app.shared.database.db_manager import DBManager
+from datetime import datetime
 
 def pipeline(user_id, question_id):
         
@@ -39,8 +41,18 @@ def pipeline(user_id, question_id):
     else:
         bot_answer = bot.audit_answer()
 
+    # Validataion Stage Creation
+    dbmanager = DBManager()
+    response = {
+            "reason":f"Final response not contains: {FALLBACK_MESSAGE}",
+            "bool_invalid": 0,
+            "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        }
+    stage = "fallback" 
+
     # Filer & Posting answer
     if FALLBACK_MESSAGE != bot_answer and "humano" not in bot_answer:
+        dbmanager.insert_ai_response(question_id, stage, response)
         try:
             question.post_response(bot_answer)
             return http_response("status", message="question_answered", http_code=200)
@@ -50,6 +62,9 @@ def pipeline(user_id, question_id):
             return http_response("error", e, http_code=200)
         
     else:
+        response["bool_invalid"]=1
+        response["reason"]=f"Final response contains: {FALLBACK_MESSAGE}"
+        dbmanager.insert_ai_response(question_id, stage, response)
         logger.info(f"Question deliver directly to Employee: {question_text}")
         try:
             notify_human_wpp(question_text, question_id, item_link, item_name)

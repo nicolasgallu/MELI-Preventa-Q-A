@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, String, JSON, insert, select
+from sqlalchemy import create_engine, MetaData, Table, Column, String, JSON, insert, select, Boolean, TIMESTAMP
 from sqlalchemy.exc import OperationalError, ProgrammingError
 from app.shared.core.logger import logger
 from app.shared.core.settings import DATABASE_URL
+from datetime import datetime
 
 # ======================================================
 # CONFIGURACIÓN DE CONEXIÓN A CLOUD SQL
@@ -62,11 +63,11 @@ class DBManager:
         self.questions = questions_table
         self.items = items_table
         self.ai_responses = ai_responses_table
+        self.invalid_ai_answers = invalid_ai_answers_table
 
 
     def question_search(self, question_id):
-        """
-        """
+        
         try:
             stmt = select(self.questions.c.data).where(
                 self.questions.c.question_id == question_id
@@ -74,8 +75,7 @@ class DBManager:
             with self.engine.connect() as conn:
                 result = conn.execute(stmt).fetchone()
                 if result:
-                    # 'result' es un objeto Row. Accedemos al valor de la columna 'data'
-                    question_data = result[0] # o result['data'] si el driver lo soporta mejor
+                    question_data = result[0]
                     logger.info(f"Question ID {question_id} found.")
                     return question_data
                 else: 
@@ -86,8 +86,7 @@ class DBManager:
 
 
     def items_search(self, question_id):
-        """
-        """
+        
         try:
             stmt = select(self.items.c.data).where(
                 self.items.c.question_id == question_id
