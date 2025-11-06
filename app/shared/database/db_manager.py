@@ -1,22 +1,13 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, String, JSON, insert, select
 from sqlalchemy.exc import OperationalError, ProgrammingError
 from app.shared.core.logger import logger
-import os
+from app.shared.core.settings import DATABASE_URL
 
 # ======================================================
 # CONFIGURACIÓN DE CONEXIÓN A CLOUD SQL
 # ======================================================
 
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASS")
-DB_NAME = os.getenv("DB_NAME")
-DB_SOCKET_DIR = os.getenv("DB_SOCKET_DIR")
-INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
 
-DATABASE_URL = (
-    f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/"
-    f"{DB_NAME}?host={DB_SOCKET_DIR}/{INSTANCE_CONNECTION_NAME}"
-)
 
 logger.info(f"DATABASE URL: {DATABASE_URL}")
 
