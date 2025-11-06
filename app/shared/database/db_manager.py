@@ -63,8 +63,6 @@ class DBManager:
         self.questions = questions_table
         self.items = items_table
         self.ai_responses = ai_responses_table
-        self.invalid_ai_answers = invalid_ai_answers_table
-
 
     def question_search(self, question_id):
         
