@@ -2,7 +2,10 @@ import openai
 import requests
 from datetime import datetime
 from app.shared.core.logger import logger
-from app.shared.core.settings import OPENAI_API_KEY, GPT_MODEL, DS_API_KEY, DS_MODEL
+from app.shared.core.settings import OPENAI_API_KEY, DS_API_KEY
+
+GPT_MODEL = "gpt-4"
+DS_MODEL = "deepseek-chat"
 
 class AiSwitch():
     
@@ -74,12 +77,12 @@ class AiSwitch():
         }
         """
         try:
-            logger.info("Trying to Run Deepseek Model..")
+            logger.info("Invoking DeepSeek model.")
             data = self._call_deepseek()
-            logger.info(f"Deepseek AI Success Run: {data}")
+            logger.info(f"DeepSeek answer completed successfully: [{data['response'][:15]}...]")
             return data
         except Exception as e:
-            logger.warning("Deepseek Failed, trying to use OpenAI Model", exc_info=e)
+            logger.warning(f"DeepSeek answer failed. Switching to fallback model: OpenAI. | Error: {str(e)}")
             data = self._call_openai()
-            logger.info(f"OpenAI Success Run: {data}")
+            logger.info("OpenAI fallback successful.")
             return data

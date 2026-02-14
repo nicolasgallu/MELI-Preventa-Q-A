@@ -1,5 +1,5 @@
 # Usa tu imagen base de Python
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 # Establecer el directorio de trabajo en /app
 WORKDIR /app
@@ -24,4 +24,4 @@ EXPOSE 8080
 
 # Comando de inicio: Usar el formato SHELL para que $PORT se expanda.
 # Importante: Se eliminan --reload y watchdog, ya que no son para producción.
-CMD gunicorn --bind 0.0.0.0:${PORT} --chdir /app --timeout 60 main:app
+CMD ["python", "-m", "gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--threads", "4", "--worker-class", "gthread", "--timeout", "300", "main:app"]

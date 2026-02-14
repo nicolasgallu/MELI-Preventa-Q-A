@@ -1,74 +1,88 @@
-from app.shared.core.logger import logger
-from app.shared.core.settings import FALLBACK_MESSAGE
-from app.mercadolibre.utils.token_meli import token_meli
-from app.shared.core.http_response import http_response
-from app.mercadolibre.utils.questions import QuestionsAPI
-from app.mercadolibre.utils.notifications import notify_human_wpp,notify_errors_intern
-from app.mercadolibre.services.bot import AiPreOrder
-from app.shared.database.db_manager import DBManager
 from datetime import datetime
+from app.shared.core.secrets import meli_secrets
+from app.shared.core.notifications import enviar_mensaje_whapi
+from app.mercadolibre.utils.mercadolibre_api import QuestionsAPI
+from app.mercadolibre.utils.bot import AiPreOrder
+from app.shared.database.db_manager import DBManager
+from app.shared.core.logger import logger
+from app.shared.core.settings import FALLBACK_MESSAGE, PHONE_INTERNAL, PHONE_CLIENT
 
-def pipeline(user_id, question_id):
-        
-    logger.info(f"Processing Question - {question_id}")
-    access_token = token_meli(user_id)
 
-    # Instancing Question Object
+#//////////MERCADOLIBRE QUESTIONS PIPELINE//////////###
+def pipeline(data):
+
+    user_id = data.get("user_id")
+    question_id = data.get("resource").split("/")[-1]
+    logger.info(f"Processing Question: {question_id}")
+
+    #Access to meli token
+    access_token = meli_secrets()
+
+    #Instancing Question Object
     question = QuestionsAPI(user_id, question_id, access_token)
-    # Calling QuestionsAPI
+    
+    #Calling QuestionsAPI
     question_data = question.get_question_data()
 
-    # Filter if Answered
+    #Filter if Answered
     if question_data == "already_answered" or question_data == "already_registered":
-        logger.info("Question Already Answered or in DB - Nothing to Do.")
-        return http_response("status", message="question_responded", http_code=200)
+        logger.info(f"Question ID: {question_id} already resolved.")
+        return
     
-    # Calling ItemsAPI
+    #Calling ItemsAPI
     item_data = question.get_item_data()
 
-    # Variables
+    #Variables
     question_text = question_data.get("text")
-    item_link = item_data.get("permalink")
     item_name = item_data.get("title") 
 
-    # Instancing Bot Object
+    #AUXILIAR MENSAJE PARA DUEÑO (en caso de no responderse la pregunta utilizaremos este mensaje)
+    external_message = (
+        "⚠️ *El bot no pudo responder al cliente en MercadoLibre.*\n"
+        "Por favor, respondé solo reemplazando el campo *'su respuesta aquí'*.\n"
+        "*No modifiques el resto del mensaje*, así el sistema puede procesarlo correctamente.\n\n"
+        f"*ID:* {user_id}-{question_id}\n"
+        f"*ITEM:* {item_name}\n"
+        f"*PREGUNTA:* {question_text}\n\n"
+        "*RESPUESTA:* <su respuesta aquí>"
+    )
+
+
+    #Instancing Bot Object
     bot = AiPreOrder(user_id, question_id, question_text, item_data)
     
-    # Executing AI Pipeline
+    #Executing AI Pipeline
     category = bot.classify_question()
-    if category == "busqueda_inventario":
+    if category == "ai_inventory_search":
         bot_answer = bot.recommendation_answer()
     else:
         bot_answer = bot.audit_answer()
 
-    # Validataion Stage Creation
+    #Auxiliar Creating values for valid/invalid answer.
     dbmanager = DBManager()
     response = {
             "reason":f"Final response not contains: {FALLBACK_MESSAGE}",
             "bool_invalid": 0,
             "timestamp": datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         }
-    stage = "fallback" 
-
-    # Filer & Posting answer
-    if FALLBACK_MESSAGE != bot_answer and "humano" not in bot_answer:
-        dbmanager.insert_ai_response(question_id, stage, response)
-        try:
-            question.post_response(bot_answer)
-            return http_response("status", message="question_answered", http_code=200)
-        except Exception as e:
-            notify_errors_intern("Preventa-MeliReply-Error", e)
-            notify_human_wpp(question_text, question_id, item_link, item_name)
-            return http_response("error", e, http_code=200)
+  
+    #Filer & Posting answer
+    logger.info(f"Validating fallback filter for question: {question_id}")
+    if FALLBACK_MESSAGE != bot_answer and "humano" not in bot_answer: #SUCCES ANSWER
+        logger.info("Answer passed the fallback filter.")
+        dbmanager.insert_ai_response(question_id, stage="fallback", response=response)
+        response = question.post_response(bot_answer)
+        if response == True:
+            return
+        else:
+            enviar_mensaje_whapi(response, PHONE_INTERNAL)
+            enviar_mensaje_whapi(external_message, PHONE_CLIENT)
+            return
         
-    else:
+    else: #FAILED ANSWER
+        logger.info("Answer failed to pass the fallback filter.")
         response["bool_invalid"]=1
         response["reason"]=f"Final response contains: {FALLBACK_MESSAGE}"
-        dbmanager.insert_ai_response(question_id, stage, response)
-        logger.info(f"Question deliver directly to Employee: {question_text}")
-        try:
-            notify_human_wpp(question_text, question_id, item_link, item_name)
-            return http_response("status", message="question_unanswered", http_code=200)
-        except Exception as e:
-            notify_errors_intern("Preventa-NotifyWpp-Error",e)
-            return http_response("error", e, http_code=200)
+        dbmanager.insert_ai_response(question_id, stage="fallback", response=response)
+        enviar_mensaje_whapi(external_message, PHONE_CLIENT)
+        return

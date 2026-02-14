@@ -14,12 +14,12 @@ class QuestionsAPI():
         self.question_id = question_id
         self.token = access_token  
         self.headers = {"Authorization": f"Bearer {self.token}"}
-        # Varibale
+        # Variable
         self.item_id = item_id        
         # DB Manager
         self.dbmanager = DBManager()
 
-
+    # ////////////////////////////// GET METHODS ////////////////////////////////////////
     def get_question_data(self):
         """Obtiene datos de la pregunta recibida y realiza check de si ya esta procesada"""
         try:
@@ -29,10 +29,11 @@ class QuestionsAPI():
                 question_data = response.json()
                 self.item_id = question_data.get("item_id")
                 status = question_data.get("status")
-                logger.info("CHECKING IF ANSWERED")
+                logger.info(f"Checking if question {self.question_id} has already been answered...")
                 if status == "ANSWERED":
                     return "already_answered"
-                if self.dbmanager.question_search(self.question_id) != False:
+                if self.dbmanager.question_search(self.question_id):
+                    logger.info(f"Checking if question {self.question_id} has already been saved in DB...")
                     return "already_registered"
                 else:
                     payload = {
@@ -50,9 +51,10 @@ class QuestionsAPI():
             logger.exception(f"Exception fetching question {self.question_id}")
         return False
 
-
     def get_item_data(self):
         """Obtiene los datos básicos del item desde la API."""
+
+        logger.info(f"Fetching item data from Mercado Libre API | Item ID: {self.item_id}")
         try:
             # Fields Definition
             url_a = f"""
@@ -110,17 +112,17 @@ class QuestionsAPI():
             logger.exception(f"Exception fetching item data {self.item_id}")
             return False
 
-
+    # ////////////////////////////// POST METHODS ////////////////////////////////////////
     def post_response(self, answer):
+        logger.info("Dispatching answer to Mercado Libre API...")
         payload = {
             "question_id": self.question_id, 
             "text": answer}
-        try:
-            response = requests.post(self.ANSWERS_URL, headers=self.headers, json=payload)
-            if response.status_code == 200:
-                logger.info(f"Successfull Response to Question:{self.question_id}")
-                return True
-            logger.error(f"Error to Response Question:{self.question_id} - {response.json()}")
-        except Exception as e:
-             logger.exception(f"Exception to Response Question:{self.question_id} - {e}")
-        return False
+        response = requests.post(self.ANSWERS_URL, headers=self.headers, json=payload)
+        if response.status_code == 200:
+            logger.info("Successfully sent answer to Mercado Libre.")
+            return True
+        else:
+            response = response.json()
+            logger.error(f"Failed to send answer to Mercado Libre | Question: {self.question_id} | Response: {response}")
+            return response

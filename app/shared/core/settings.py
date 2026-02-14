@@ -1,73 +1,27 @@
 import os
 from dotenv import load_dotenv
-
-# Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
-#directorio base
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Subir un nivel desde "core"
+FALLBACK_MESSAGE = "consultar con humano"
 
 # SERVICES > LLM MODULE
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DS_API_KEY = os.getenv("DEEPSEEK_API_KEY")
-GPT_MODEL = "gpt-4"
-DS_MODEL = "deepseek-chat"
-FALLBACK_MESSAGE = "consultar con humano"
 
-##NOTIFICATIONS EMAIL INTERN
-SENDER_EMAIL = os.getenv("SENDER_EMAIL")
-SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
+# WHAPI CREDS
+TOKEN_WHAPI = os.getenv("TOKEN_WHAPI")
+PHONE_INTERNAL = os.getenv("PHONE") #para notificaciones internas al area de GUIAS.
+PHONE_CLIENT = os.getenv("PHONE") #para notificaciones externas, ej cliente.
 
-##GBQ ACCESS
-GOOGLE_APPLICATION_CREDENTIALS = {
-'type': os.getenv("type"),
-'project_id': os.getenv("project_id"),
-'private_key_id': os.getenv("private_key_id"),
-'private_key': os.getenv("private_key").replace('\\n', '\n'),
-'client_email': os.getenv("client_email"),
-'client_id': os.getenv("client_id"),
-'auth_uri': os.getenv("auth_uri"),
-'token_uri': os.getenv("token_uri"),
-'auth_provider_x509_cert_url': os.getenv("auth_provider_x509_cert_url"),
-'client_x509_cert_url': os.getenv("client_x509_cert_url"),
-'universe_domain': os.getenv("universe_domain")
-}
+#CLOUD SQL (MYSQL)
+INSTANCE_DB = os.getenv("INSTANCE_DB")
+USER_DB = os.getenv("USER_DB")
+PASSWORD_DB = os.getenv("PASSWORD_DB")
+NAME_DB = os.getenv("NAME_DB")
 
-##TABLAS
-DATASET_ID = os.getenv("DATASET_ID")
-TABLE_CREDENTIALS = os.getenv("TABLE_CREDENTIALS")
-TABLE_INVENTORY = os.getenv("TABLE_INVENTORY")
-TABLE_QA_INIT = os.getenv("TABLE_QA_INIT")
-TABLE_QA_LLM = os.getenv("TABLE_QA_LLM")
-TABLE_PROMPTS = os.getenv("TABLE_PROMPTS")
-TABLE_HUM_REPLY = os.getenv("TABLE_HUM_REPLY")
+#SECRET MANAGER
+PROJECT_ID=os.getenv("PROJECT_ID")
+SECRET_ID=os.getenv("SECRET_ID")
 
-### CONTACTS ###
-PHONE_LIST_RAW = os.getenv("PHONE_LIST")
-PHONE_LIST = [p.strip() for p in PHONE_LIST_RAW.split(",") if p.strip()]
-
-### FLASK ###
-FLASK_PORT = os.getenv("FLASK_PORT")
-
-
-# WPP PIPELINE #
-### WPP ###
-WPP_TOKEN = os.getenv("WPP_TOKEN")
-WPP_ID = os.getenv("WPP_ID")
-META_APP_SECRET = os.getenv("META_APP_SECRET")
-VERIFY_WHOOK =  os.getenv("VERIFY_WHOOK")
-
-#INTERN CODE
-SECRET_CODE = os.getenv("SECRET_CODE")
-
-#CLOUD SQL (PG)
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASS")
-DB_NAME = os.getenv("DB_NAME")
-DB_SOCKET_DIR = os.getenv("DB_SOCKET_DIR")
-INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
-
-DATABASE_URL = (
-    f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/"
-    f"{DB_NAME}?host={DB_SOCKET_DIR}/{INSTANCE_CONNECTION_NAME}"
-)
+#MERCADOLIBRE USERID
+USER_ID=os.getenv("USER_ID")
