@@ -1,108 +1,53 @@
+Entendido, vamos a lo simple y limpio. Sin tablas complejas ni exceso de adornos, enfocado en que se lea bien en GitHub:
 
 ---
 
-# 🚀 Webhook de MercadoLibre – Servidor Flask
+# 🚀 E-commerce AI Support Bot
 
-Este proyecto crea un **servidor Flask** que escucha notificaciones enviadas por el **webhook de MercadoLibre**, manejando **exclusivamente las notificaciones de preguntas** para procesarlas y responderlas automáticamente.
+Motor de respuestas automáticas para centralizar y automatizar la atención al cliente en **MercadoLibre** y **WhatsApp (Whapi)**. Utiliza **Flask** y modelos de IA (**DeepSeek** y **OpenAI**) para generar respuestas humanas y precisas.
 
----
+### 🛠️ Stack Tecnológico
 
-## 🛠️ Tecnologías Utilizadas
+* **Framework:** Flask (Python)
+* **IA:** DeepSeek API & OpenAI API (GPT-4o/o1)
+* **DB:** Cloud SQL (MySQL) con SQLAlchemy
+* **Mensajería:** Whapi.cloud
+* **Cloud:** Google Cloud Secret Manager
 
-* 🐍 **Flask** → Framework de Python para levantar el servidor.
-* 📊 **BigQuery (GBQ)** → Almacenamiento y gestión de datos de preguntas y respuestas.
-* 🤖 **APIs de LLMs (DeepSeek y OpenAI)** → Generación de respuestas automáticas con IA.
-* 📧 **Gmail SMTP** → Envío de notificaciones por correo electrónico.
+### 🗄️ Base de Datos
 
----
+El sistema utiliza las siguientes tablas principales:
 
-## ⚙️ Configuración del Proyecto
+* `questions`: Registro de preguntas entrantes.
+* `items`: Metadata de productos.
+* `ai_responses`: Log de razonamiento y respuestas de la IA.
+* `product_catalog_sync`: Stock y nombres sincronizados.
+* `prompts`: Instrucciones dinámicas para los agentes de IA.
 
-Para que todo funcione correctamente, seguí estos pasos:
+### ⚙️ Configuración (.env)
 
-### 1️⃣ Crear el archivo `.env`
-
-En el directorio raíz, crea un archivo `.env` con las siguientes variables:
+Crea un archivo `.env` con las siguientes variables:
 
 ```ini
-# 🔑 LLMs
-DEEPSEEK_API_KEY="XXX"
-OPENAI_API_KEY="XXX"
+# IA
+OPENAI_API_KEY="xxx"
+DEEPSEEK_API_KEY="xxx"
 
-# 🛒 MercadoLibre
-CLIENT_ID="de la cuenta de meli"
-CLIENT_SECRET="de la cuenta de meli"
+# WHAPI
+TOKEN_WHAPI="xxx"
+PHONE="xxx"
 
-# 🗄️ BigQuery (GBQ)
-DATASET_ID="ID del dataset del proyecto"
+# DATABASE (Cloud SQL)
+INSTANCE_DB="xxx"
+USER_DB="xxx"
+PASSWORD_DB="xxx"
+NAME_DB="xxx"
 
-## Tablas
-TABLE_CREDENTIALS="tabla GBQ con token de acceso"
-TABLE_INVENTORY="tabla GBQ con metadata del item"
-TABLE_QA_INIT="tabla GBQ de preguntas procesadas"
-TABLE_QA_LLM="tabla GBQ con registro de uso del LLM"
-TABLE_PROMPTS="tabla GBQ con prompts"
+# GOOGLE & MELI
+PROJECT_ID="xxx"
+SECRET_ID="xxx"
+USER_ID="xxx"
 
-# 📬 Correo de Notificaciones
-SENDER_EMAIL="email remitente"
-SENDER_PASSWORD="código de app de Gmail"
-RECIPIENT_EMAIL="email del cliente"
-
-# 📜 Logger
-LOG_LEVEL=DEBUG
 ```
 
----
-
-### 2️⃣ Agregar credenciales de BigQuery
-
-En la carpeta `config/` incluir el archivo JSON con las credenciales de la cuenta de servicio de BigQuery:
-
-📄 **Nombre:** `bigquery-service-account.json`
-💡 Necesario para lectura/escritura en GBQ.
-
----
-
-## ▶️ Instalación y Ejecución
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
-```
-
-### 2. Crear y activar un entorno virtual
-
-```bash
-python -m venv venv
-source venv/bin/activate  # Mac/Linux
-venv\Scripts\activate    # Windows
-```
-
-### 3. Instalar dependencias
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Ejecutar el servidor
-
-```bash
-python app.py
-```
-
----
-
-## 🤝 Contribuciones
-
-Si querés mejorar el proyecto, abrí un **issue** o enviá un **pull request** con tus cambios.
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo licencia **MIT**. Más detalles en el archivo `LICENSE`.
-
----
-
+> **Nota:** En caso de error, el bot responde por defecto: *"Consultar con humano"*.
