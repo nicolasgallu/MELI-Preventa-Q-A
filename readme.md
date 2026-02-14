@@ -1,7 +1,3 @@
-Entendido, vamos a lo simple y limpio. Sin tablas complejas ni exceso de adornos, enfocado en que se lea bien en GitHub:
-
----
-
 # 🚀 E-commerce AI Support Bot
 
 Motor de respuestas automáticas para centralizar y automatizar la atención al cliente en **MercadoLibre** y **WhatsApp (Whapi)**. Utiliza **Flask** y modelos de IA (**DeepSeek** y **OpenAI**) para generar respuestas humanas y precisas.
