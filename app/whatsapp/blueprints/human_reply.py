@@ -1,6 +1,7 @@
 from flask import Blueprint, request, request, jsonify
 from app.whatsapp.services.wpp_pipeline import pipeline
 from app.shared.core.settings import USER_ID
+import threading
 
 wpp_bp = Blueprint("wpp_improve_answers", __name__, url_prefix="/webhook/messages")
 @wpp_bp.route('', methods=['GET', 'POST'])
@@ -19,7 +20,8 @@ def handle_webhook():
                  employee_reply=(line.split('*RESPUESTA:*')[1]).replace(' ','')
         
         if user_id == USER_ID:
-            pipeline(question_id, employee_reply)
+            thread = threading.Thread(target=pipeline, args=(question_id, employee_reply))
+            thread.start()
         else:
             None
     

@@ -53,5 +53,4 @@ def pipeline(question_id, employee_reply):
         message = f"Error al intentar enviar respuesta al Cliente: {e}"
         enviar_mensaje_whapi(message, PHONE_INTERNAL)
         enviar_mensaje_whapi("failed-meli-wpp-service",e)
-        return 
-
+        return

@@ -10,8 +10,8 @@ DS_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 # WHAPI CREDS
 TOKEN_WHAPI = os.getenv("TOKEN_WHAPI")
-PHONE_INTERNAL = os.getenv("PHONE") #para notificaciones internas al area de GUIAS.
-PHONE_CLIENT = os.getenv("PHONE") #para notificaciones externas, ej cliente.
+PHONE_INTERNAL = os.getenv("PHONE_INTERNAL") #para notificaciones internas al area de GUIAS.
+PHONE_CLIENT = os.getenv("PHONE_CLIENT") #para notificaciones externas, ej cliente.
 
 #CLOUD SQL (MYSQL)
 INSTANCE_DB = os.getenv("INSTANCE_DB")
@@ -25,3 +25,5 @@ SECRET_ID=os.getenv("SECRET_ID")
 
 #MERCADOLIBRE USERID
 USER_ID=os.getenv("USER_ID")
+
+SCHEMA_MERCADOLIBRE = os.getenv("SCHEMA_MERCADOLIBRE")
