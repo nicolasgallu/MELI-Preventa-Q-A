@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 import threading
 
 #BLUEPRINT CREATION
-preventa_bp = Blueprint("meli_questions", __name__, url_prefix="/webhooks/questions")
+preventa_bp = Blueprint("meli_questions", __name__, url_prefix="/webhook")
 @preventa_bp.route("", methods=["POST"], strict_slashes=False)
 def main():
     """Get notifications from Meli Customer questions."""
