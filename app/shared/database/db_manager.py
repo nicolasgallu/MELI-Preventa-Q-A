@@ -2,7 +2,7 @@ import json
 from sqlalchemy import create_engine, text
 from google.cloud.sql.connector import Connector
 from app.shared.core.logger import logger
-from app.shared.core.settings import INSTANCE_DB, USER_DB, PASSWORD_DB, NAME_DB, SCHEMA_MERCADOLIBRE
+from app.shared.core.settings import INSTANCE_DB, USER_DB, PASSWORD_DB, NAME_DB
 
 # ======================================================
 # CONEXIÓN
@@ -41,7 +41,7 @@ class DBManager:
         try:
             sql = text(f"""
                 SELECT data 
-                FROM {SCHEMA_MERCADOLIBRE}.questions 
+                FROM {NAME_DB}.questions 
                 WHERE question_id = :question_id 
                 LIMIT 1;
             """)
@@ -59,7 +59,7 @@ class DBManager:
         try:
             sql = text(f"""
                 SELECT 1 
-                FROM {SCHEMA_MERCADOLIBRE}.items 
+                FROM {NAME_DB}.items 
                 WHERE question_id = :question_id 
                 LIMIT 1;
             """)
@@ -78,7 +78,7 @@ class DBManager:
         try:
             json_data = json.dumps(data) if isinstance(data, (dict, list)) else data
             sql = text(f"""
-                INSERT INTO {SCHEMA_MERCADOLIBRE}.questions (question_id, data) 
+                INSERT INTO {NAME_DB}.questions (question_id, data) 
                 VALUES (:question_id, :data);
             """)
             with self.engine.begin() as conn:
@@ -92,7 +92,7 @@ class DBManager:
             json_data = json.dumps(data) if isinstance(data, (dict, list)) else data
             
             sql = text(f"""
-                INSERT INTO {SCHEMA_MERCADOLIBRE}.items (question_id, data) 
+                INSERT INTO {NAME_DB}.items (question_id, data) 
                 VALUES (:question_id, :data);
             """)
             with self.engine.begin() as conn:
@@ -105,7 +105,7 @@ class DBManager:
         try:
             json_resp = json.dumps(response) if isinstance(response, (dict, list)) else response
             sql = text(f"""
-                INSERT INTO {SCHEMA_MERCADOLIBRE}.ai_responses (question_id, stage, response) 
+                INSERT INTO {NAME_DB}.ai_responses (question_id, stage, response) 
                 VALUES (:question_id, :stage, :resp);
             """)
             with self.engine.begin() as conn:
@@ -120,7 +120,7 @@ class DBManager:
         try:
             sql = text(f"""
                 SELECT product_name 
-                FROM {SCHEMA_MERCADOLIBRE}.product_status 
+                FROM {NAME_DB}.product_status 
                 WHERE stock > 0 AND meli_id IS NOT NULL AND status = 'active'
             """)
             with self.engine.connect() as conn:
@@ -137,7 +137,7 @@ class DBManager:
         try:
             sql = text(f"""
                 SELECT {prompt_title} 
-                FROM {SCHEMA_MERCADOLIBRE}.prompts 
+                FROM {NAME_DB}.prompts 
                 LIMIT 1;
             """)
             with self.engine.connect() as conn:

@@ -87,9 +87,9 @@ class AiPreOrder:
         
         # Variables
         data = json.loads(self.ai_payload.get("response"))
-        status = data.get("valid")
+        status = str(data.get("valid")).lower()
         # Status Condition
-        if status == False:
+        if status == "false":
             logger.info("Audit Question - Failed & Corrected.")
             new_answer = data.get("corrected_answer")
             return new_answer

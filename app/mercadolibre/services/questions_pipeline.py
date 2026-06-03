@@ -23,6 +23,7 @@ def pipeline(data):
     
     #Calling QuestionsAPI
     question_data = question.get_question_data()
+    #------------------------------------------------------------
 
     #Filter if Answered
     if question_data == "already_answered" or question_data == "already_registered":

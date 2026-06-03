@@ -15,7 +15,7 @@ class QuestionsAPI():
         self.token = access_token  
         self.headers = {"Authorization": f"Bearer {self.token}"}
         # Variable
-        self.item_id = item_id        
+        self.item_id = item_id
         # DB Manager
         self.dbmanager = DBManager()
 
@@ -75,7 +75,8 @@ class QuestionsAPI():
             response_a = requests.get(url_a, headers=self.headers)
             if response_a.status_code != 200:
                 logger.error(f"Error fetching item data {self.item_id}: {response_a.json()}")
-                return False        
+                return False
+            logger.info("Information about the Item Pulled")
             data = response_a.json()
             # Endpoint Description
             url_b = f"{self.ITEMS_URL}/{self.item_id}/description"
@@ -109,7 +110,7 @@ class QuestionsAPI():
                 None            
             return payload
         except Exception as e:
-            logger.exception(f"Exception fetching item data {self.item_id}")
+            logger.exception(f"Exception fetching item data {self.item_id}, {e}")
             return False
 
     # ////////////////////////////// POST METHODS ////////////////////////////////////////
