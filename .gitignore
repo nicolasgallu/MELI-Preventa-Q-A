@@ -2,6 +2,7 @@
 bigquery-service-account.json
 test/
 __pycache__/
-venv/
+venv-presell-bot/
 clean_cache.sh
 telegram/
+gunicorn.conf.py

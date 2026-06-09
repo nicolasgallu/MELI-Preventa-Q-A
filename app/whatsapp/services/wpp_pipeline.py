@@ -5,12 +5,16 @@ from app.mercadolibre.utils.bot import AiPreOrder
 from app.shared.database.db_manager import DBManager
 from app.shared.core.logger import logger
 from app.shared.core.settings import PHONE_INTERNAL, PHONE_CLIENT
-
+import json
 #//////////WHATSAPP PIPELINE//////////###
 
-def pipeline(question_id, employee_reply):
-    logger.info("Receveid User message from whatsapp")
+def pipeline(payload):
+    logger.info("Starting whatsapp pipeline.")
 
+    question_id = payload.get('question_id')
+    employee_reply = payload.get('employee_reply')
+
+    logger.info("searching question")
     # Instancing DBManager
     dbmanager = DBManager()
     question_data = dbmanager.question_search(question_id)
