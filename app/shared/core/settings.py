@@ -22,6 +22,3 @@ NAME_DB = os.getenv("NAME_DB")
 #SECRET MANAGER
 PROJECT_ID=os.getenv("PROJECT_ID")
 SECRET_ID=os.getenv("SECRET_ID")
-
-#MERCADOLIBRE USERID
-USER_ID=os.getenv("USER_ID")
